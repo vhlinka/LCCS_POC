@@ -1,100 +1,52 @@
-<%@ taglib prefix="portlet" uri="http://java.sun.com/portlet_2_0"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ page contentType="text/html" isELIgnored="false"%>
+<%@include file="/jsp/common.jsp" %>
 
+<jsp:useBean id="fundrequest" class="oh.lccs.portal.requestfund.domain.RequestFunds" scope="session">
+	<jsp:setProperty name="fundrequest" property="*"/>
+</jsp:useBean>
 
+<portlet:actionURL var="searchSACWISURL" name="searchSACWIS"></portlet:actionURL>
 
-<style type="text/css">
-	.tab-content-container {
-		margin: 0px;
-		position: relative;
-		background-color: #f4f4f4;
-		border: 1px solid #1c5a83;
-		clear: both;
-		/*color: #1c5a83;*/
-		font-family: Verdana, Arial, sans-serif;
-		font-size: 0.85em;
-		}
-		.row {
-			line-height: 3em;
-		}
-		.labelCol, .fieldCol {
-			float: left;
-			padding: 3px 5px;
-			padding-left: 2%;
-		}
-		
-		.required:after {
-			content: " *";
-			color: red;
-		}
-		
-		label {
-		cursor: default;
-		}
-		
-		label.labelStyle{
-			/* Style for all form labels used in the main content area, for non-required fields */
-			font-size: 100%;
-			font-weight: normal;
-			color:  #336699;
-			}
-		
-</style>
-
-<portlet:resourceURL var="searchCaseBasedOnSacwisNumber" id="searchCaseBasedOnSacwisNumber" ></portlet:resourceURL>
-
-<div class="bootstrap3" id="lccs-request-for-funds-body">
+<liferay-ui:panel-container id="lccs-request-for-funds-body">
 	<div id="server-form-validation-errors"><!-- server form validation errors div --></div>
 	<div id="form-validation-errors"><ul><!-- errors --></ul></div>
 	
 	<div id="lccs-request-for-funds-main-content">
 	
-		<div class="tab-content-container form-group" id="lccs-request-for-funds-case-worker">
-			<div class="row">
-				 <div class="labelCol">
-					<label class="labelStyle" for="caseWorkerName">Caseworker Requesting:</label>
-				 </div>
-				   <div class="fieldCol"><c:out value="${requestingCaseWorker}"></c:out> </div>
-			<!-- </div>
-
-			<div class="row"> -->
-				 <div class="labelCol">
-					<label class="labelStyle" for="caseWorkerPhone">Worker Phone:</label>
-				 </div>
-				   <div class="fieldCol"><c:out value="${workerPhoneNumber}"></c:out> </div>
-<!-- 			</div>
-			
-			<div class="row"> -->
-				 <div class="labelCol">
-					<label class="labelStyle" for="requestDate">Date:</label> 
-				 </div>
-				   <div class="fieldCol"><c:out value="${requestedDate}"></c:out> </div>
-			</div>
-		</div>	<!-- End: lccs-request-for-funds-case-worker -->
+		<liferay-ui:panel title="REQUESTING CASE WORKER DETAILS"  id="lccs-request-for-funds-case-worker">
+				<aui:input  inlineField="true"  disabled="true" value="Mark Waugh" label="Caseworker Requesting: " name="caseWorkerName"></aui:input> 
+        		<aui:input  inlineField="true" disabled="true" value="614-378-2234" label="Worker Phone:" name="caseWorkerPhone"></aui:input>
+        		<aui:input  inlineField="true" disabled="true" value="12/02/2014" label="Request Date: "  name="requestDate"></aui:input>
+		</liferay-ui:panel>	<!-- End: lccs-request-for-funds-case-worker -->
 		<br/> <!-- Seperator -->
 		
-		<div id="lccs-request-for-funds-form-content" class="tab-content-container">
-			<portlet:actionURL var="searchSACWISURL" name="searchSACWIS"></portlet:actionURL>
-			<form action="<%= searchSACWISURL %>" class="form-inline" role="form" id="requestFundsSearchForm" method="post">
-		
-				<div class="">
-					<div class="row">
-					 	<div class="labelCol"><label class="labelStyle" for="sacwisId">Sacwis ID</label> </div>
-					 	 <div class="fieldCol">
-					 	 	<input type="text" id="sacwisId" name="sacwisId" class="form-control" required data-msg-required="Sacwis ID is required."/>
-					 	 </div>
-					 	 <div class="fieldCol">
-					 	 	<button type="submit" class="btn btn-primary" id="requestFundsSearchFormSubmit">Search</button>
-					 	 </div>
-					</div>
-				</div>
-			</form>
-		</div><!-- End:lccs-request-for-funds-form-content -->
+		<liferay-ui:panel title=" CASE SEARCH " id="lccs-request-for-funds-form-content">
+			<aui:form name="requestFundsSearchForm" id="requestFundsSearchForm" action="<%= searchSACWISURL %>" method="post">
+				<aui:layout> 		
+					<aui:fieldset>
+						<aui:input
+								name="caseId"
+								label="Sacwis ID">
+								<aui:validator name="required" />
+								<aui:validator name="number" />
+								<aui:validator name="min">5</aui:validator>
+								
+						</aui:input>
+					 
+						<aui:button-row>
+			 				<aui:button type="submit" value="Search"/>
+			 				<aui:button
+								type="cancel"
+			 					value="Cancel"
+			 					onClick="<%= cancelRequestURL %>"
+			 					/>
+			 			</aui:button-row>
+					</aui:fieldset>
+				</aui:layout>
+			</aui:form>
+		</liferay-ui:panel><!-- End:lccs-request-for-funds-form-content -->
 	</div><!--lccs-request-for-funds-main-content -->
 	
-</div> <!--End: lccs-request-for-funds-body  -->
+</liferay-ui:panel-container> <!--End: lccs-request-for-funds-body  -->
 <div id="lccs-request-for-funds-search-result-content">
 </div>
 

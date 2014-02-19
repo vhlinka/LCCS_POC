@@ -17,12 +17,17 @@ String greeting = (String)prefs.getValue(
 
 <portlet:actionURL var="requestFundsURL" name="setupSearch"></portlet:actionURL>
 
-<portlet:actionURL var="approveFundsURL" name="showPendingRequests"></portlet:actionURL>
+<portlet:actionURL var="showPendingRequestsURL" name="showPendingRequests"></portlet:actionURL>
 
 <portlet:actionURL var="sampleFormURL" name="runSampleForm"></portlet:actionURL>
 
+<br>
+<p><aui:a label="Submit a New Request for Funds" href="<%= requestFundsURL %>" /></p>
+<p><aui:a label="Review Pending Requests for Funds" href="<%= showPendingRequestsURL %>" /></p>
+				
 
-<p><a href="<%= requestFundsURL %>">Submit a New Request for Funds</a></p>
-<p><a href="<%= approveFundsURL %>">Review Pending Requests for Funds</a></p>
+
+<%-- 
 
 <p><a href="<%= sampleFormURL %>">Sample AlloutUI Form</a></p>
+ --%>

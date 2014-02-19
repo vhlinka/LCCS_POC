@@ -6,6 +6,8 @@
 
 <%@ page import="oh.lccs.portal.requestfund.domain.RequestFunds" %>
 
-
+<portlet:renderURL var="cancelRequestURL">
+    <portlet:param name="jspPage" value="/jsp/view.jsp" />
+</portlet:renderURL>
 
 <portlet:defineObjects />

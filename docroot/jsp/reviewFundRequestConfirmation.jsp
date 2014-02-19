@@ -1,8 +1,6 @@
 
 <%@include file="/jsp/common.jsp" %>
-
-
-<p>Your Request has been submitted. An e-mail notification will be sent to you once approved.</p>
+<p> An e-mail notification on Fund Status update will be sent to CaseWorker.</p>
 <p></p>
 
 <portlet:renderURL  var="requestFundsURL">

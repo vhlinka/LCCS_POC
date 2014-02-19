@@ -4,31 +4,35 @@
 package oh.lccs.portal.requestfund.domain;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 /**
  * @author BCMSZV0
  *
  */
 public class CaseParticipant {
+	private BigDecimal id;
+	
+	private BigDecimal requestFundsId;
 	
 	private String personFullName;
-	private String sacwisId;
+	private BigDecimal sacwisId;
 	private BigDecimal caseId;
-	private String dob;
+	private Timestamp dob;
 	private String type;
 	private String requestingPersonCheckbox;
 	
 	private String custody;
-	private String custodyAgencyId;
-	private String placement;
-	private String custodyDate;
+	private BigDecimal custodyAgencyId;
+	private BigDecimal placement;
+	private Timestamp custodyDate;
 	private String iveReimbursable;
 	
 	//Audit Info
-	private String createdBy;
-	private String createdDate;
-	private String modifiedby;
-	private String modifiedDate;
+	private BigDecimal createdBy;
+	private Timestamp createdDate;
+	private BigDecimal modifiedby;
+	private Timestamp modifiedDate;
 	
 	public String getPersonFullName() {
 		return personFullName;
@@ -36,16 +40,16 @@ public class CaseParticipant {
 	public void setPersonFullName(String personFullName) {
 		this.personFullName = personFullName;
 	}
-	public String getSacwisId() {
+	public BigDecimal getSacwisId() {
 		return sacwisId;
 	}
-	public void setSacwisId(String sacwisId) {
+	public void setSacwisId(BigDecimal sacwisId) {
 		this.sacwisId = sacwisId;
 	}
-	public String getDob() {
+	public Timestamp getDob() {
 		return dob;
 	}
-	public void setDob(String dob) {
+	public void setDob(Timestamp dob) {
 		this.dob = dob;
 	}
 	public String getType() {
@@ -72,22 +76,22 @@ public class CaseParticipant {
 	public void setCustody(String custody) {
 		this.custody = custody;
 	}
-	public String getCustodyAgencyId() {
+	public BigDecimal getCustodyAgencyId() {
 		return custodyAgencyId;
 	}
-	public void setCustodyAgencyId(String custodyAgencyId) {
+	public void setCustodyAgencyId(BigDecimal custodyAgencyId) {
 		this.custodyAgencyId = custodyAgencyId;
 	}
-	public String getPlacement() {
+	public BigDecimal getPlacement() {
 		return placement;
 	}
-	public void setPlacement(String placement) {
+	public void setPlacement(BigDecimal placement) {
 		this.placement = placement;
 	}
-	public String getCustodyDate() {
+	public Timestamp getCustodyDate() {
 		return custodyDate;
 	}
-	public void setCustodyDate(String custodyDate) {
+	public void setCustodyDate(Timestamp custodyDate) {
 		this.custodyDate = custodyDate;
 	}
 	public String getIveReimbursable() {
@@ -96,31 +100,55 @@ public class CaseParticipant {
 	public void setIveReimbursable(String iveReimbursable) {
 		this.iveReimbursable = iveReimbursable;
 	}
-	public String getCreatedBy() {
+	public BigDecimal getCreatedBy() {
 		return createdBy;
 	}
-	public void setCreatedBy(String createdBy) {
+	public void setCreatedBy(BigDecimal createdBy) {
 		this.createdBy = createdBy;
 	}
-	public String getCreatedDate() {
+	public Timestamp getCreatedDate() {
 		return createdDate;
 	}
-	public void setCreatedDate(String createdDate) {
+	public void setCreatedDate(Timestamp createdDate) {
 		this.createdDate = createdDate;
 	}
-	public String getModifiedby() {
+	public BigDecimal getModifiedby() {
 		return modifiedby;
 	}
-	public void setModifiedby(String modifiedby) {
+	public void setModifiedby(BigDecimal modifiedby) {
 		this.modifiedby = modifiedby;
 	}
-	public String getModifiedDate() {
+	public Timestamp getModifiedDate() {
 		return modifiedDate;
 	}
-	public void setModifiedDate(String modifiedDate) {
+	public void setModifiedDate(Timestamp modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
+	public BigDecimal getId() {
+		return id;
+	}
+	public void setId(BigDecimal id) {
+		this.id = id;
+	}
+	public BigDecimal getRequestFundsId() {
+		return requestFundsId;
+	}
+	public void setRequestFundsId(BigDecimal requestFundsId) {
+		this.requestFundsId = requestFundsId;
+	}
+	@Override
+	public String toString() {
+		return "CaseParticipant [id=" + id + ", requestFundsId="
+				+ requestFundsId + ", personFullName=" + personFullName
+				+ ", sacwisId=" + sacwisId + ", caseId=" + caseId + ", dob="
+				+ dob + ", type=" + type + ", requestingPersonCheckbox="
+				+ requestingPersonCheckbox + ", custody=" + custody
+				+ ", custodyAgencyId=" + custodyAgencyId + ", placement="
+				+ placement + ", custodyDate=" + custodyDate
+				+ ", iveReimbursable=" + iveReimbursable + ", createdBy="
+				+ createdBy + ", createdDate=" + createdDate + ", modifiedby="
+				+ modifiedby + ", modifiedDate=" + modifiedDate + "]";
+	}
 	
-
-
+	
 }

@@ -5,12 +5,9 @@
 <%
 	//RequestFunds requestForm = (RequestFunds) request.getAttribute("fundrequest");
 %>
-<jsp:useBean id="fundrequest" class="oh.lccs.portal.requestfund.domain.RequestFunds" scope="request"/>
-
-
-<portlet:renderURL var="cancelRequestURL">
-    <portlet:param name="jspPage" value="/jsp/view.jsp" />
-</portlet:renderURL>
+<jsp:useBean id="fundrequest" class="oh.lccs.portal.requestfund.domain.RequestFunds" scope="session">
+	<jsp:setProperty name="fundrequest" property="*"/>
+</jsp:useBean>
 
 <portlet:actionURL var="submitRequestURL" name="submitFundRequest"></portlet:actionURL>
 
