@@ -18,6 +18,8 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 
+
+import oh.lccs.portal.requestfund.common.LccsConstants;
 import oh.lccs.portal.requestfund.domain.*;
 import oh.lccs.portal.requestfund.service.RequestFundsService;
 import oh.lccs.portal.requestfund.service.impl.RequestFundsServiceImpl;
@@ -45,17 +47,44 @@ public class RequestFundController extends MVCPortlet {
     /**
      * 
      */
-    public void showPendingRequests(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortletException
+    public void showPendingRequestsSupervisor(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortletException
     {
     	RequestFunds dto = new RequestFunds();
     	dto.setCaseId(new BigDecimal(23233));
-    	List<RequestFunds> fundRequestSearchResult = getRequestFundsService().retrieveRequestFundsRequests(dto);
+    	List<RequestFunds> fundRequestSearchResult = getRequestFundsService().retrieveRequestFundsRequests(LccsConstants.REQUEST_SUBMITED);
     	actionRequest.setAttribute("pendingFundRequest", fundRequestSearchResult);
     	actionRequest.setAttribute("pendingFundRequestCount", fundRequestSearchResult.size());
     	
-    	actionResponse.setRenderParameter("jspPage", "/jsp/showPendingRequests.jsp"); 
+    	actionResponse.setRenderParameter("jspPage", "/jsp/showPendingRequestsSupervisor.jsp"); 
     }
     
+    /**
+     * 
+     */
+    public void showPendingRequestsManager(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortletException
+    {
+    	RequestFunds dto = new RequestFunds();
+    	dto.setCaseId(new BigDecimal(23233));
+    	List<RequestFunds> fundRequestSearchResult = getRequestFundsService().retrieveRequestFundsRequests(LccsConstants.SUPERVISOR_APPROVAL);
+    	actionRequest.setAttribute("pendingFundRequest", fundRequestSearchResult);
+    	actionRequest.setAttribute("pendingFundRequestCount", fundRequestSearchResult.size());
+    	
+    	actionResponse.setRenderParameter("jspPage", "/jsp/showPendingRequestsManager.jsp"); 
+    }
+    
+    /**
+     * 
+     */
+    public void showPendingRequestsFinancial(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortletException
+    {
+    	RequestFunds dto = new RequestFunds();
+    	dto.setCaseId(new BigDecimal(23233));
+    	List<RequestFunds> fundRequestSearchResult = getRequestFundsService().retrieveRequestFundsRequests(LccsConstants.MANAGER_APPROVAL);
+    	actionRequest.setAttribute("pendingFundRequest", fundRequestSearchResult);
+    	actionRequest.setAttribute("pendingFundRequestCount", fundRequestSearchResult.size());
+    	
+    	actionResponse.setRenderParameter("jspPage", "/jsp/showPendingRequestsFinancial.jsp"); 
+    }
     
     public void searchSACWIS(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortletException
     {
@@ -85,7 +114,7 @@ public class RequestFundController extends MVCPortlet {
     	actionResponse.setRenderParameter("jspPage", "/jsp/requestConfirmation.jsp"); 
     }
     
-    public void reviewFundRequest(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortletException
+    public void reviewFundRequestSupervisor(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortletException
     {
 //    	SessionErequestFormrrors.add(actionRequest, "email_error");    	
     	//PortletSession ps = actionRequest.getPortletSession();
@@ -97,10 +126,39 @@ public class RequestFundController extends MVCPortlet {
 			actionRequest.setAttribute("fundrequest", fundRequestReview);
 		}
 		
-    	actionResponse.setRenderParameter("jspPage", "/jsp/reviewFundRequest.jsp"); 
+    	actionResponse.setRenderParameter("jspPage", "/jsp/reviewFundRequestSupervisor.jsp"); 
     }
 
-    public void approveFundRequest(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortletException
+    public void reviewFundRequestManager(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortletException
+    {
+//    	SessionErequestFormrrors.add(actionRequest, "email_error");    	
+    	//PortletSession ps = actionRequest.getPortletSession();
+        
+    	String[] selectedFundRequests = ParamUtil.getParameterValues(actionRequest, "rowIds");
+		if(selectedFundRequests != null && selectedFundRequests.length > 0){
+			RequestFunds fundRequestReview = getRequestFundsService().retrieveFundRequestForReview(new BigDecimal(selectedFundRequests[0]));
+			System.out.println("fundRequestReview === " + fundRequestReview);
+			actionRequest.setAttribute("fundrequest", fundRequestReview);
+		}
+		
+    	actionResponse.setRenderParameter("jspPage", "/jsp/reviewFundRequestManager.jsp"); 
+    }
+    
+    public void reviewFundRequestFinancial(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortletException
+    {
+//    	SessionErequestFormrrors.add(actionRequest, "email_error");    	
+    	//PortletSession ps = actionRequest.getPortletSession();
+        
+    	String[] selectedFundRequests = ParamUtil.getParameterValues(actionRequest, "rowIds");
+		if(selectedFundRequests != null && selectedFundRequests.length > 0){
+			RequestFunds fundRequestReview = getRequestFundsService().retrieveFundRequestForReview(new BigDecimal(selectedFundRequests[0]));
+			System.out.println("fundRequestReview === " + fundRequestReview);
+			actionRequest.setAttribute("fundrequest", fundRequestReview);
+		}
+		
+    	actionResponse.setRenderParameter("jspPage", "/jsp/reviewFundRequestFinancial.jsp"); 
+    }
+    public void approveFundRequestSupervisor(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortletException
     {
 //    	SessionErequestFormrrors.add(actionRequest, "email_error");    	
     	//PortletSession ps = actionRequest.getPortletSession();
@@ -108,12 +166,12 @@ public class RequestFundController extends MVCPortlet {
     	RequestFunds requestForm = Utility.populateRequestFundsFromForm(actionRequest);
 		System.out.println("fundRequestApprove === " + requestForm);
         
-		getRequestFundsService().updateFundRequestStatus(requestForm.getId(), new BigDecimal(1));
+		getRequestFundsService().updateFundRequestStatus(requestForm.getId(), LccsConstants.SUPERVISOR_APPROVAL);
     	
 		actionResponse.setRenderParameter("jspPage", "/jsp/reviewFundRequestConfirmation.jsp"); 
     }
     
-    public void declineFundRequest(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortletException
+    public void declineFundRequestSupervisor(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortletException
     {
 //    	SessionErequestFormrrors.add(actionRequest, "email_error");    	
     	//PortletSession ps = actionRequest.getPortletSession();
@@ -121,10 +179,37 @@ public class RequestFundController extends MVCPortlet {
     	RequestFunds requestForm = Utility.populateRequestFundsFromForm(actionRequest);
 		System.out.println("fundRequestDecline === " + requestForm);
         
-		getRequestFundsService().updateFundRequestStatus(requestForm.getId(), new BigDecimal(2));
+		getRequestFundsService().updateFundRequestStatus(requestForm.getId(), LccsConstants.SUPERVISOR_DENIAL);
     	
 		actionResponse.setRenderParameter("jspPage", "/jsp/reviewFundRequestConfirmation.jsp"); 
     }
+    
+    public void approveFundRequestManager(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortletException
+    {
+//    	SessionErequestFormrrors.add(actionRequest, "email_error");    	
+    	//PortletSession ps = actionRequest.getPortletSession();
+    	
+    	RequestFunds requestForm = Utility.populateRequestFundsFromForm(actionRequest);
+		System.out.println("fundRequestApprove === " + requestForm);
+        
+		getRequestFundsService().updateFundRequestStatus(requestForm.getId(), LccsConstants.MANAGER_APPROVAL);
+    	
+		actionResponse.setRenderParameter("jspPage", "/jsp/reviewFundRequestConfirmation.jsp"); 
+    }
+    
+    public void declineFundRequestManager(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortletException
+    {
+//    	SessionErequestFormrrors.add(actionRequest, "email_error");    	
+    	//PortletSession ps = actionRequest.getPortletSession();
+        
+    	RequestFunds requestForm = Utility.populateRequestFundsFromForm(actionRequest);
+		System.out.println("fundRequestDecline === " + requestForm);
+        
+		getRequestFundsService().updateFundRequestStatus(requestForm.getId(), LccsConstants.MANAGER_DENIAL);
+    	
+		actionResponse.setRenderParameter("jspPage", "/jsp/reviewFundRequestConfirmation.jsp"); 
+    }
+    
     
     private RequestFundsService getRequestFundsService(){
     	if(requestFundsService == null){

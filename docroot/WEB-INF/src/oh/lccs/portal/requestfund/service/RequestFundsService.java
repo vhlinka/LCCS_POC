@@ -15,7 +15,7 @@ public interface RequestFundsService {
 	
 	boolean updateData(RequestFunds dto);
 	
-	List<RequestFunds> retrieveRequestFundsRequests(RequestFunds dto);
+	List<RequestFunds> retrieveRequestFundsRequests(BigDecimal statusCode);
 	
 	RequestFunds retrieveFundRequestForReview(BigDecimal fundRequestId);
 	

@@ -9,7 +9,7 @@
 	<portlet:param name="jspPage" value="/jsp/view.jsp"/>
 </portlet:renderURL>
 
-<aui:form action="<%= requestFundsURL %>" method="post">
+<aui:form action="<%= requestFundsURL %>">
 	<aui:fieldset>
  		<aui:button-row>
     		<aui:button type="done" value="Done" />

@@ -139,11 +139,11 @@ public class RequestFundsServiceImpl implements RequestFundsService {
 	
 
 	@Override
-	public List<RequestFunds> retrieveRequestFundsRequests(RequestFunds dto) {
+	public List<RequestFunds> retrieveRequestFundsRequests(BigDecimal statusCode) {
 		
-		List<Map<String, Object>> requestFundsColl = getRequestFundsDAO().retrieveRequestFundsRequests(dto.getCaseId());
+		List<Map<String, Object>> requestFundsColl = getRequestFundsDAO().retrieveRequestFundsRequests(statusCode);
 		List<RequestFunds> requestFundsList = new ArrayList<RequestFunds>();
-		// TODO Auto-generated method stub
+
 		if(requestFundsColl != null && requestFundsColl.size()> 0){
 			Iterator<Map<String, Object>> itr = requestFundsColl.iterator();
 			while(itr.hasNext()){

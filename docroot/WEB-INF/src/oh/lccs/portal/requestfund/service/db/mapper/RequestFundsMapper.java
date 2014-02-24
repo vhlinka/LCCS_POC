@@ -84,7 +84,7 @@ public interface RequestFundsMapper {
 			+ " APPROVER_NAME= #{approverName}, APPROVER=#{approver}, CREATED_DATE= #{createdDate}, CREATED_BY=#{createdBy}, "
 			+ "	MODIFIED_DATE=#{modifiedDate}, MODIFIED_BY=#{modifiedby}";
 	
-	static final String RETRIEVE_REQUEST_FUNDS_REQUESTS = "select REQUEST_FUNDS_ID as id, case_id as caseId, case_name as caseName, case_worker as caseWorker, created_date as createdDate from request_funds where STATUS_CODE = 0";
+	static final String RETRIEVE_REQUEST_FUNDS_REQUESTS = "select REQUEST_FUNDS_ID as id, case_id as caseId, case_name as caseName, case_worker as caseWorker, created_date as createdDate from request_funds where STATUS_CODE = #{statusCode}";
 	
 	static final String RETRIEVE_FUND_REQUEST_BY_ID = "select REQUEST_FUNDS_ID as id, CASE_ID as caseId, REQUESTED_DATE as requestedDate, CASE_WORKER_REQUESTING as requestingCaseWorker, " +
 												"CASE_WORKER as caseWorker ,CASE_NAME as caseName, WORKER_PHONE as workerPhoneNumber, DONATION as donation, PREPLACEMENT as prePlacement, " +
@@ -121,7 +121,7 @@ public interface RequestFundsMapper {
 	public int updateFundRequest(RequestFunds requestFund);
 	
 	@Select(RETRIEVE_REQUEST_FUNDS_REQUESTS)
-	public List<RequestFunds> retrieveRequestFundsRequests(@Param("caseId") String caseId);
+	public List<RequestFunds> retrieveRequestFundsRequests(@Param("statusCode") BigDecimal statusCode);
 	
 	@Select(RETRIEVE_FUND_REQUEST_BY_ID)
 	public List<RequestFunds> retrieveFundsRequestById(@Param("id") String requestFundId);

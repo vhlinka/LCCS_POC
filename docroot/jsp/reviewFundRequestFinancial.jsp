@@ -13,12 +13,12 @@
 	<%-- <jsp:setProperty name="fundrequest" property="*"/> --%>
 </jsp:useBean>
 
-<portlet:actionURL var="approveRequestURL" name="approveFundRequest"></portlet:actionURL>
-<portlet:actionURL var="declineRequestURL" name="declineFundRequest"></portlet:actionURL>
+<portlet:actionURL var="approveRequestFinancialURL" name="approveFundRequestFinancial"></portlet:actionURL>
+<portlet:actionURL var="showPendingRequestsFinancialURL" name="showPendingRequestsFinancial"></portlet:actionURL>
 
 <%RowChecker rowCh = new RowChecker(renderResponse); %>
 <liferay-ui:panel-container id="bootstrap31">
-	<aui:form name="SacwisForm" method="post" action="${approveRequestURL}">
+	<aui:form name="SacwisForm" method="post" action="${approveRequestFinancialURL}">
 
 		<liferay-ui:panel title="CASE WORKER DETAILS" extended="true">
  			<fieldset>
@@ -121,8 +121,8 @@
 		
 		
 		<aui:button-row>
-			<aui:button type="cancel" value="Decline" onClick="${declineRequestURL}" />
-			<aui:button type="submit" value="Approve"/>
+			<aui:button type="cancel" value="Cancel" onClick="${showPendingRequestsFinancialURL}" />
+			<aui:button type="submit" value="Preview in PDEF"/>
 		</aui:button-row>
 		
 		

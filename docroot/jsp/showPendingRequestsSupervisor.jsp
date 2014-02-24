@@ -7,20 +7,15 @@
 <liferay-ui:error key="error" message="Sorry, an error prevented saving your greeting" />
 <liferay-ui:error key="email_error" message="Sorry, email notification not implemented yet" />
 
-<portlet:actionURL var="reviewFundRequestURL" name="reviewFundRequest">
+<portlet:actionURL var="reviewFundRequestSupervisorURL" name="reviewFundRequestSupervisor">
 </portlet:actionURL>
-
-<%-- <portlet:actionURL var="requestFundsURL" name="searchSACWIS">
-    <portlet:param name="caseId" value="23233" />
-</portlet:actionURL> --%>
-
 
 
 <liferay-ui:panel-container id="bootstrap31">
-	<aui:form name="pendingFundRequestsForm" method="post" action="${reviewFundRequestURL}">
+	<aui:form name="pendingFundRequestsForm" method="post" action="${reviewFundRequestSupervisorURL}">
 		<liferay-ui:panel title=" Pending Fund Requests" extended="true">
 	 		<liferay-ui:search-container delta="10" 
-	 			emptyResultsMessage="no such user"
+	 			emptyResultsMessage="No Pending Fund Requests"
 	 			rowChecker="<%= new RowChecker(renderResponse) %>" >
 				<liferay-ui:search-container-results results="${pendingFundRequest}" total="${pendingFundRequestCount}"/>
 		

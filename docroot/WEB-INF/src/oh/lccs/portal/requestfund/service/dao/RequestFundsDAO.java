@@ -19,7 +19,7 @@ public interface RequestFundsDAO {
 	
 	boolean updateFundRequest(RequestFunds requestFunds);
 	
-	List<Map<String, Object>> retrieveRequestFundsRequests(BigDecimal sacwisId);
+	List<Map<String, Object>> retrieveRequestFundsRequests(BigDecimal statusCode);
 	
 	List<Map<String, Object>> retrieveFundRequest(BigDecimal fundRequestId);
 	

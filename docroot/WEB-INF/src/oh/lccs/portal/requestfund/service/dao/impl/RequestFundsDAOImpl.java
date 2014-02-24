@@ -113,9 +113,9 @@ public class RequestFundsDAOImpl implements RequestFundsDAO {
 
 	@Override
 	public List<Map<String, Object>> retrieveRequestFundsRequests(
-			BigDecimal sacwisId) {
+			BigDecimal statusCode) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("caseId",sacwisId);
+		parameters.put("statusCode",statusCode);
 		
 		List<Map<String, Object>> userInfo = new RequestFundMybatisDML().performLCCSSelect(RETRIEVE_FUNDS_REQUEST_MAPPER, parameters );
 		System.out.println(userInfo);
