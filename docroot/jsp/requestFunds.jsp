@@ -1,5 +1,8 @@
 <%@include file="/jsp/common.jsp" %>
 
+<liferay-ui:error key="caseIdNotFound-error" message="No Records Found. Please try with valid Sacwis Id." />
+<liferay-ui:error key="system-error" message="System failure. Please try again later." />
+
 <jsp:useBean id="fundrequest" class="oh.lccs.portal.requestfund.domain.RequestFunds" scope="session">
 	<jsp:setProperty name="fundrequest" property="*"/>
 </jsp:useBean>
@@ -12,13 +15,6 @@
 	
 	<div id="lccs-request-for-funds-main-content">
 	
-		<liferay-ui:panel title="REQUESTING CASE WORKER DETAILS"  id="lccs-request-for-funds-case-worker">
-				<aui:input  inlineField="true"  disabled="true" value="Mark Waugh" label="Caseworker Requesting: " name="caseWorkerName"></aui:input> 
-        		<aui:input  inlineField="true" disabled="true" value="614-378-2234" label="Worker Phone:" name="caseWorkerPhone"></aui:input>
-        		<aui:input  inlineField="true" disabled="true" value="12/02/2014" label="Request Date: "  name="requestDate"></aui:input>
-		</liferay-ui:panel>	<!-- End: lccs-request-for-funds-case-worker -->
-		<br/> <!-- Seperator -->
-		
 		<liferay-ui:panel title=" CASE SEARCH " id="lccs-request-for-funds-form-content">
 			<aui:form name="requestFundsSearchForm" id="requestFundsSearchForm" action="<%= searchSACWISURL %>" method="post">
 				<aui:layout> 		

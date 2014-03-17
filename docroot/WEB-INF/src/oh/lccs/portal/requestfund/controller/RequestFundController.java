@@ -19,6 +19,8 @@ import com.liferay.portal.kernel.util.Validator;
 
 
 
+
+import oh.lccs.portal.requestfund.common.LCCSException;
 import oh.lccs.portal.requestfund.common.LccsConstants;
 import oh.lccs.portal.requestfund.domain.*;
 import oh.lccs.portal.requestfund.service.RequestFundsService;
@@ -31,6 +33,9 @@ import oh.lccs.portal.requestfund.service.impl.RequestFundsServiceImpl;
  *	The following always gets called
  */
 public class RequestFundController extends MVCPortlet {
+
+	static String SYSTEM_ERROR = "system-error";
+	static String RECORD_NOT_FOUND_ERROR = "caseIdNotFound-error";
 	
 	private RequestFundsService requestFundsService;
     
@@ -88,13 +93,25 @@ public class RequestFundController extends MVCPortlet {
     
     public void searchSACWIS(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortletException
     {
-    	RequestFunds fundRequestInput = Utility.populateRequestFundsFromForm(actionRequest);
+    	try{
+	    	
+    		RequestFunds fundRequestInput = Utility.populateRequestFundsFromForm(actionRequest);
+	    	
+	    	RequestFunds fundRequestSearchResult = getRequestFundsService().searchForm(fundRequestInput);
+	    	
+	    	actionRequest.setAttribute("fundrequest", fundRequestSearchResult);
+	    	
+	    	actionResponse.setRenderParameter("jspPage", "/jsp/searchResult.jsp");//requestForm.jsp");
     	
-    	RequestFunds fundRequestSearchResult = getRequestFundsService().searchForm(fundRequestInput);
-
-    	actionRequest.setAttribute("fundrequest", fundRequestSearchResult);
-    	
-    	actionResponse.setRenderParameter("jspPage", "/jsp/searchResult.jsp");//requestForm.jsp"); 
+    	}catch(LCCSException le){
+    		le.printStackTrace();
+    		SessionErrors.add(actionRequest, RECORD_NOT_FOUND_ERROR);
+    		actionResponse.setRenderParameter("jspPage", "/jsp/requestFunds.jsp");
+    	}catch(Exception e){
+    		e.printStackTrace();
+    		SessionErrors.add(actionRequest, SYSTEM_ERROR);
+    		actionResponse.setRenderParameter("jspPage", "/jsp/requestFunds.jsp");
+    	}
     }
 
     public void submitFundRequest(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortletException

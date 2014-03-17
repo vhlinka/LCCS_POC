@@ -1,7 +1,6 @@
 package oh.lccs.portal.requestfund.service.impl;
 
 import java.math.BigDecimal;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -9,6 +8,7 @@ import java.util.Map;
 
 
 import oh.lccs.portal.requestfund.common.DateUtils;
+import oh.lccs.portal.requestfund.common.LCCSException;
 import oh.lccs.portal.requestfund.common.LccsConstants;
 import oh.lccs.portal.requestfund.common.LucasServiceConstants;
 import oh.lccs.portal.requestfund.domain.CaseDetails;
@@ -26,12 +26,6 @@ public class RequestFundsServiceImpl implements RequestFundsService {
 
 	private RequestFundsDAO requestFundsDAO;
 
-	
-	@Override
-	public RequestFunds searchForm(RequestFunds dto) {
-		return mockData(dto);
-	}
-	
 	private RequestFundsDAO getRequestFundsDAO(){
 		if(requestFundsDAO == null){
 			requestFundsDAO = new RequestFundsDAOImpl();
@@ -39,22 +33,31 @@ public class RequestFundsServiceImpl implements RequestFundsService {
 		
 		return requestFundsDAO;
 	}
-	private RequestFunds mockData(RequestFunds dto){
+	
+	@Override
+	public RequestFunds searchForm(RequestFunds dto) throws LCCSException{
 		
-		RequestFunds searchResult= new RequestFunds();
+		RequestFunds searchResult = new RequestFunds();
 		List<Map<String, Object>> caseParticipantsColl = getRequestFundsDAO().searchBasedOnSacwisId(dto.getCaseId());
 		
 		List<Map<String, Object>> caseDetailsColl = getRequestFundsDAO().retrieveCaseDetails(dto.getCaseId());
 		
-		if(caseDetailsColl != null && caseDetailsColl.size()> 0){
-			CaseDetails caseDetail= (CaseDetails) caseDetailsColl.get(0);
-			searchResult.setCaseName(caseDetail.getCaseName());
-			searchResult.setCaseWorker(caseDetail.getCaseWorker());
-			searchResult.setRequestingCaseWorker(new BigDecimal(caseDetail.getRequestingCaseWorker()));
-			searchResult.setRequestedDate(DateUtils.getMMDDYYYYStringAsDate(caseDetail.getRequestedDate()));
-			searchResult.setWorkerPhoneNumber(caseDetail.getWorkerPhoneNumber());
-			
+		if(caseDetailsColl != null && caseDetailsColl.size()> 0 
+				&& !caseDetailsColl.isEmpty() ){
+			Iterator<Map<String, Object>> caseDetailsIterator = caseDetailsColl.iterator();
+			Object caseObj = caseDetailsIterator.next();
+			if(!(caseObj instanceof CaseDetails)){
+				throw new LCCSException();
+			}
 		}
+		
+		CaseDetails caseDetail= (CaseDetails) caseDetailsColl.get(0);
+		searchResult.setCaseName(caseDetail.getCaseName());
+		searchResult.setCaseWorker(caseDetail.getCaseWorker());
+		searchResult.setRequestingCaseWorker(new BigDecimal(caseDetail.getRequestingCaseWorker()));
+		searchResult.setRequestedDate(DateUtils.getMMDDYYYYStringAsDate(caseDetail.getRequestedDate()));
+		searchResult.setWorkerPhoneNumber(caseDetail.getWorkerPhoneNumber());
+		
 		searchResult.setCaseId(new BigDecimal(1234));
 		if(dto.getCaseId() != null){
 			searchResult.setCaseId(dto.getCaseId());	

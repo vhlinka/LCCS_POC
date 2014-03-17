@@ -23,7 +23,8 @@
 		<liferay-ui:panel title="CASE WORKER DETAILS" extended="true">
  			<fieldset>
 				<aui:input  inlineField="true" label="Sacwis ID: "  name="caseId" value="${fundrequest.caseId}"></aui:input>
-				<aui:input  inlineField="true" label="Request Date: "  name="requestedDate" value="${fundrequest.requestedDate}"></aui:input>
+				<liferay-ui:input-date formName="requestedDate" yearValue="2010" monthValue="3" dayValue="21" dayParam="d1" monthParam="m1" yearParam="y1" />
+				<%-- <aui:input  inlineField="true" label="Request Date: "  name="requestedDate" value="${fundrequest.requestedDate}"></aui:input> --%>
 			</fieldset>
 			<fieldset>
 				<aui:input  inlineField="true" label="Caseworker Requesting: " name="requestingCaseWorker" value="${fundrequest.requestingCaseWorker}"></aui:input> 
@@ -82,28 +83,7 @@
 				    <liferay-ui:search-iterator/>
 				</liferay-ui:search-container>
 			  </aui:field-wrapper>	
-			  <%-- <% int rowCount=1; %>  
-			   <c:forEach var="requestingForPeople" items="${fundrequest.requestingForPeople}">
-				   <liferay-ui:panel title="Person Full Name : ${requestingForPeople.personFullName}" collapsible="false" extended="true">
-					   	<aui:fieldset column="true">
-							<aui:input inlineField="true"  name="personFullName" label="" type="checkbox" value=""></aui:input>
-							<aui:input inlineField="true" disabled="true" name="sacwisId" label="Client/Sacwis ID: " type="text" value="${requestingForPeople.sacwisId}"></aui:input>
-				        	<aui:input inlineField="true" disabled="true" name="dob" label="DOB: " type="text" value="${requestingForPeople.dob}"></aui:input>
-				        	<aui:input inlineField="true" disabled="true" name="type" label="Type: " type="text" value="${requestingForPeople.type}"></aui:input>
-				        	
-				        	<aui:input inlineField="true" disabled="true" name="type" label="Custody With: " type="text" value="${requestingForPeople.custody}"></aui:input>
-				        	<aui:input inlineField="true" disabled="true" name="type" label="Child Placement: " type="text" value="${requestingForPeople.placement}"></aui:input>
-				        	<aui:input inlineField="true" disabled="true" name="type" label="Custody Date: " type="text" value="${requestingForPeople.custodyDate}"></aui:input>
-				        	<aui:input inlineField="true" disabled="true" name="type" label="IV-E Reimbursable: " type="text" value="${requestingForPeople.iveReimbursable}"></aui:input>
-					    
-					    </aui:fieldset>
-			        </liferay-ui:panel>
-		        	<% rowCount++; %> 
-				
-			  </c:forEach> --%>
 		</liferay-ui:panel>
-
-
 
 		<liferay-ui:panel title="FILL IN THE BELOW INFORMATION FOR APPROVAL" extended="true">
 			<aui:fieldset column="true"  size="260" >
@@ -134,13 +114,9 @@
 					<aui:input maxlength="250" rows="6" label="Furniture/Appliances Delivery to: " name="furnitureDeliveryAddress" type="textarea" value="${fundrequest.furnitureDeliveryAddress}"></aui:input>
 		        	<aui:input label="Charge to budget Center: "  name="budgetCenter" value="${fundrequest.budgetCenter}"></aui:input>
 					<aui:input label="Line Item: "  name="lineItem" value="${fundrequest.lineItem}"></aui:input>
-					
-				
 				</aui:column>    			
 	         </aui:fieldset>   			
-		
 		</liferay-ui:panel>
-		
 		
 		<aui:button-row>
 			<aui:button type="submit" value="Submit the request for approval"/>
