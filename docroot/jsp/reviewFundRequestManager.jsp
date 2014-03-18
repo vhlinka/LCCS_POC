@@ -9,6 +9,9 @@
 
 <%@ page contentType="text/html" isELIgnored="false"%>
 <portlet:defineObjects />
+
+<liferay-ui:error key="system-error" message="System failure. Please try again later." />
+
 <jsp:useBean id="fundrequest" class="oh.lccs.portal.requestfund.domain.RequestFunds" scope="session">
 	<%-- <jsp:setProperty name="fundrequest" property="*"/> --%>
 </jsp:useBean>

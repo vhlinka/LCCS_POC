@@ -6,6 +6,7 @@
 <liferay-ui:success key="success" message="Greeting saved successfully!"/>
 <liferay-ui:error key="error" message="Sorry, an error prevented saving your greeting" />
 <liferay-ui:error key="email_error" message="Sorry, email notification not implemented yet" />
+<liferay-ui:error key="system-error" message="System failure. Please try again later." />
 
 <portlet:actionURL var="reviewFundRequestSupervisorURL" name="reviewFundRequestSupervisor">
 </portlet:actionURL>
