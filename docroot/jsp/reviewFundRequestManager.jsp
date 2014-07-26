@@ -75,7 +75,7 @@
 				        <liferay-ui:search-container-column-text name="DOB" property="dob"/>
 						<liferay-ui:search-container-column-text name="Type" property="type"/>
 						<liferay-ui:search-container-column-text name="Custody With" property="custody"/>
-						<liferay-ui:search-container-column-text name="Child Placement" property="placement"/>
+						<liferay-ui:search-container-column-text name="Child Placement" property="serviceDesc"/>
 						<liferay-ui:search-container-column-text name="Custody Date" property="custodyDate"/>
 						<liferay-ui:search-container-column-text name="IV-E Reimbursable" property="iveReimbursable"/>
 				         

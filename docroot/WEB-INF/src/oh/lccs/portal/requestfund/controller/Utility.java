@@ -1,18 +1,16 @@
 package oh.lccs.portal.requestfund.controller;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.portlet.ActionRequest;
 
-import com.liferay.portal.kernel.dao.search.ResultRow;
-import com.liferay.portal.kernel.dao.search.SearchContainer;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.WebKeys;
-
 import oh.lccs.portal.requestfund.common.DateUtils;
 import oh.lccs.portal.requestfund.common.LccsConstants;
-import oh.lccs.portal.requestfund.domain.*;
+import oh.lccs.portal.requestfund.domain.RequestFunds;
+
+import com.liferay.portal.kernel.util.ParamUtil;
 
 
 public class Utility {
@@ -40,7 +38,7 @@ public class Utility {
 		requestFunds.setBudgetCenter( actionRequest.getParameter("budgetCenter") );
 		if(actionRequest.getParameter("personRespForPurchase") != null && 
 				!"".equalsIgnoreCase(actionRequest.getParameter("personRespForPurchase").trim())){
-			requestFunds.setPersonRespForPurchase( new BigDecimal( actionRequest.getParameter("personRespForPurchase")));
+			requestFunds.setPersonRespForPurchase( actionRequest.getParameter("personRespForPurchase"));
 		}
 		
 		if(actionRequest.getParameter("caseId") != null && 
@@ -52,7 +50,9 @@ public class Utility {
 				!"".equalsIgnoreCase(actionRequest.getParameter("requestDate").trim())){
 			requestFunds.setRequestedDate(DateUtils.getMMDDYYYYStringAsDate(actionRequest.getParameter("requestDate")));
 		}else{
-			requestFunds.setRequestedDate(new Date());
+			SimpleDateFormat df1 = new SimpleDateFormat("dd/MM/yyyy");
+			String currentDate = df1.format(new Date());
+			requestFunds.setRequestedDate(DateUtils.getMMDDYYYYStringAsDate(currentDate));
 		}
 		
 		if(actionRequest.getParameter("requestingCaseWorker") != null && 
@@ -137,9 +137,9 @@ public class Utility {
 		
 		if(actionRequest.getParameter("personRespForPurchase") != null && 
 				!"".equalsIgnoreCase(actionRequest.getParameter("personRespForPurchase").trim())){
-			requestFunds.setPersonRespForPurchase(new BigDecimal(actionRequest.getParameter("personRespForPurchase")));
+			requestFunds.setPersonRespForPurchase(actionRequest.getParameter("personRespForPurchase"));
 		}else{
-			requestFunds.setPersonRespForPurchase(new BigDecimal(0));
+			requestFunds.setPersonRespForPurchase(LccsConstants.EMPTY_STRING);
 		}
 		
 		if(actionRequest.getParameter("requestPurpose") != null && 
@@ -147,6 +147,13 @@ public class Utility {
 			requestFunds.setRequestPurpose(actionRequest.getParameter("requestPurpose"));
 		}else{
 			requestFunds.setRequestPurpose(LccsConstants.EMPTY_STRING);
+		}
+		
+		if(actionRequest.getParameter("ssnTaxId") != null && 
+				!"".equalsIgnoreCase(actionRequest.getParameter("ssnTaxId").trim())){
+			requestFunds.setSsnTaxId(actionRequest.getParameter("ssnTaxId"));
+		}else{
+			requestFunds.setSsnTaxId(LccsConstants.EMPTY_STRING);
 		}
 		
 		if(actionRequest.getParameter("otherCommResContacted") != null && 

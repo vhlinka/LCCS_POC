@@ -38,7 +38,7 @@ public class RequestFunds {
 	private String[] selectedCaseParticipants;
 	
 	//Information filed in by Caseworker for approval
-	private BigDecimal personRespForPurchase;
+	private String personRespForPurchase;
 	private String requestPurpose;
 	private String otherCommResContacted;
 	private String totalAmtRequested;
@@ -50,6 +50,7 @@ public class RequestFunds {
 	private String furnitureDeliveryAddress;
 	private String budgetCenter;
 	private String lineItem;
+	private String ssnTaxId;
 	
 	//Variables for the workflow
 	private BigDecimal statusCode;
@@ -191,11 +192,11 @@ public class RequestFunds {
 		this.alternativeResponse = alternativeResponse;
 	}
 
-	public BigDecimal getPersonRespForPurchase() {
+	public String getPersonRespForPurchase() {
 		return personRespForPurchase;
 	}
 
-	public void setPersonRespForPurchase(BigDecimal personRespForPurchase) {
+	public void setPersonRespForPurchase(String personRespForPurchase) {
 		this.personRespForPurchase = personRespForPurchase;
 	}
 
@@ -397,6 +398,16 @@ public class RequestFunds {
 	}
 
 
+	public String getSsnTaxId() {
+		return ssnTaxId;
+	}
+
+
+	public void setSsnTaxId(String ssnTaxId) {
+		this.ssnTaxId = ssnTaxId;
+	}
+
+
 	@Override
 	public String toString() {
 		return "RequestFunds [id=" + id + ", name=" + name + ", caseId="
@@ -424,6 +435,7 @@ public class RequestFunds {
 				+ otherInstructions + ", furnitureDeliveryAddress="
 				+ furnitureDeliveryAddress + ", budgetCenter=" + budgetCenter
 				+ ", lineItem=" + lineItem + ", statusCode=" + statusCode
+				+ ", ssnTaxId=" + ssnTaxId
 				+ ", approverName=" + approverName + ", approver=" + approver
 				+ ", createdBy=" + createdBy + ", createdDate=" + createdDate
 				+ ", modifiedby=" + modifiedby + ", modifiedDate="

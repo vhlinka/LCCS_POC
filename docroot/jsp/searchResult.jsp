@@ -6,6 +6,7 @@
 <%@ page import="com.liferay.portal.kernel.dao.search.RowChecker" %>
 <%@ page import="com.liferay.portal.kernel.dao.search.SearchContainer" %>
 <%@ page import="com.liferay.portal.kernel.util.WebKeys" %>
+<%@ page import="com.liferay.portal.kernel.util.ListUtil" %>
 
 <%@ page contentType="text/html" isELIgnored="false"%>
 <portlet:defineObjects />
@@ -23,8 +24,8 @@
 		<liferay-ui:panel title="CASE WORKER DETAILS" extended="true">
  			<fieldset>
 				<aui:input  inlineField="true" label="Sacwis ID: "  name="caseId" value="${fundrequest.caseId}"></aui:input>
-				<liferay-ui:input-date formName="requestedDate" yearValue="2010" monthValue="3" dayValue="21" dayParam="d1" monthParam="m1" yearParam="y1" />
-				<%-- <aui:input  inlineField="true" label="Request Date: "  name="requestedDate" value="${fundrequest.requestedDate}"></aui:input> --%>
+				<!--<liferay-ui:input-date formName="requestedDate" yearValue="2010" monthValue="3" dayValue="21" dayParam="d1" monthParam="m1" yearParam="y1" />-->
+				 <aui:input  inlineField="true" label="Request Date: "  name="requestedDate" value="01/21/2013"></aui:input> 
 			</fieldset>
 			<fieldset>
 				<aui:input  inlineField="true" label="Caseworker Requesting: " name="requestingCaseWorker" value="${fundrequest.requestingCaseWorker}"></aui:input> 
@@ -64,8 +65,7 @@
 				  	delta="10" emptyResultsMessage="No Participants for Case"
 					rowChecker="<%= new RowChecker(renderResponse) %>" 
 					>
-				    <liferay-ui:search-container-results results="${fundrequest.requestingForPeople}" total="${fundrequest.countOfParticipants}"/>
-	
+				   <liferay-ui:search-container-results results="${fundrequest.requestingForPeople}" total="${fundrequest.countOfParticipants}"/>
 				    <liferay-ui:search-container-row className="oh.lccs.portal.requestfund.domain.CaseParticipant" keyProperty="sacwisId" modelVar="requestingForPeople">
 				        <liferay-ui:search-container-column-text name="Person's Full Name" property="personFullName">
 				        	<%-- <aui:input inlineField="true"  name="personFullName" label="personFullName" type="checkx" value=""></aui:input> --%>
@@ -74,12 +74,13 @@
 				        <liferay-ui:search-container-column-text name="DOB" property="dob"/>
 						<liferay-ui:search-container-column-text name="Type" property="type"/>
 						<liferay-ui:search-container-column-text name="Custody With" property="custody"/>
-						<liferay-ui:search-container-column-text name="Child Placement" property="placement"/>
+						<liferay-ui:search-container-column-text name="Child Placement" property="serviceDesc"/>
+							<aui:input  type = "hidden" inlineField="true" label="PlacementId : " name="placementId" value="placementId"></aui:input>
 						<liferay-ui:search-container-column-text name="Custody Date" property="custodyDate"/>
 						<liferay-ui:search-container-column-text name="IV-E Reimbursable" property="iveReimbursable"/>
 				         
-				    </liferay-ui:search-container-row>
-				
+				    </liferay-ui:search-container-row>	
+					
 				    <liferay-ui:search-iterator/>
 				</liferay-ui:search-container>
 			  </aui:field-wrapper>	
@@ -98,6 +99,7 @@
 					  	<aui:option selected="<%= \"VOUCHER\".equalsIgnoreCase(fundrequest.getFundMode()) %>" value="VOUCHER"><liferay-ui:message key="Voucher" /></aui:option>
 						<aui:option selected="<%= \"CHECK\".equalsIgnoreCase(fundrequest.getFundMode()) %>" value="CHECK"><liferay-ui:message key="Check" /></aui:option>
 					</aui:select>
+					<aui:input  label="SS#/Tax Id of Payee: "  name="ssnTaxId" value="${fundrequest.ssnTaxId}"></aui:input>
 					<aui:input maxlength="250" rows="6" label="Made Payable To:* " name="paymentMadeFor" type="textarea" required="true" value="${fundrequest.paymentMadeFor}"></aui:input>
 					<aui:input maxlength="250" rows="6" label="Other Instructions: " name="otherInstructions" type="textarea" value="${fundrequest.otherInstructions}"></aui:input>
 		        	

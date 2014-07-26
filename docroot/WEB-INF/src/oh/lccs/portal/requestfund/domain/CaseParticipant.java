@@ -18,14 +18,15 @@ public class CaseParticipant {
 	private String personFullName;
 	private BigDecimal sacwisId;
 	private BigDecimal caseId;
-	private Timestamp dob;
+	private String dob;
 	private String type;
 	private String requestingPersonCheckbox;
 	
 	private String custody;
 	private BigDecimal custodyAgencyId;
-	private BigDecimal placement;
-	private Timestamp custodyDate;
+	private String serviceDesc;
+	private BigDecimal placementId;
+	private String custodyDate;
 	private String iveReimbursable;
 	
 	//Audit Info
@@ -46,10 +47,10 @@ public class CaseParticipant {
 	public void setSacwisId(BigDecimal sacwisId) {
 		this.sacwisId = sacwisId;
 	}
-	public Timestamp getDob() {
+	public String getDob() {
 		return dob;
 	}
-	public void setDob(Timestamp dob) {
+	public void setDob(String dob) {
 		this.dob = dob;
 	}
 	public String getType() {
@@ -82,16 +83,22 @@ public class CaseParticipant {
 	public void setCustodyAgencyId(BigDecimal custodyAgencyId) {
 		this.custodyAgencyId = custodyAgencyId;
 	}
-	public BigDecimal getPlacement() {
-		return placement;
+	public String getServiceDesc() {
+		return serviceDesc;
 	}
-	public void setPlacement(BigDecimal placement) {
-		this.placement = placement;
+	public void setServiceDesc(String serviceDesc) {
+		this.serviceDesc = serviceDesc;
 	}
-	public Timestamp getCustodyDate() {
+	public BigDecimal getPlacementId() {
+		return placementId;
+	}
+	public void setPlacementId(BigDecimal placementId) {
+		this.placementId = placementId;
+	}
+	public String getCustodyDate() {
 		return custodyDate;
 	}
-	public void setCustodyDate(Timestamp custodyDate) {
+	public void setCustodyDate(String custodyDate) {
 		this.custodyDate = custodyDate;
 	}
 	public String getIveReimbursable() {
@@ -143,8 +150,9 @@ public class CaseParticipant {
 				+ ", sacwisId=" + sacwisId + ", caseId=" + caseId + ", dob="
 				+ dob + ", type=" + type + ", requestingPersonCheckbox="
 				+ requestingPersonCheckbox + ", custody=" + custody
-				+ ", custodyAgencyId=" + custodyAgencyId + ", placement="
-				+ placement + ", custodyDate=" + custodyDate
+				+ ", custodyAgencyId=" + custodyAgencyId + ", serviceDesc="
+				+ serviceDesc +", placementId="
+						+ placementId + ", custodyDate=" + custodyDate
 				+ ", iveReimbursable=" + iveReimbursable + ", createdBy="
 				+ createdBy + ", createdDate=" + createdDate + ", modifiedby="
 				+ modifiedby + ", modifiedDate=" + modifiedDate + "]";

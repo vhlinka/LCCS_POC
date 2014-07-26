@@ -16,8 +16,10 @@
 	<%-- <jsp:setProperty name="fundrequest" property="*"/> --%>
 </jsp:useBean>
 
-<portlet:actionURL var="approveRequestFinancialURL" name="approveFundRequestFinancial"></portlet:actionURL>
+<portlet:actionURL var="approveRequestFinancialURL" name="previewPdf"></portlet:actionURL>
 <portlet:actionURL var="showPendingRequestsFinancialURL" name="showPendingRequestsFinancial"></portlet:actionURL>
+<portlet:actionURL var="previewPdf" name="previewPdf"></portlet:actionURL>
+
 
 <%RowChecker rowCh = new RowChecker(renderResponse); %>
 <liferay-ui:panel-container id="bootstrap31">
@@ -75,7 +77,7 @@
 				        <liferay-ui:search-container-column-text name="DOB" property="dob"/>
 						<liferay-ui:search-container-column-text name="Type" property="type"/>
 						<liferay-ui:search-container-column-text name="Custody With" property="custody"/>
-						<liferay-ui:search-container-column-text name="Child Placement" property="placement"/>
+						<liferay-ui:search-container-column-text name="Child Placement" property="serviceDesc"/>
 						<liferay-ui:search-container-column-text name="Custody Date" property="custodyDate"/>
 						<liferay-ui:search-container-column-text name="IV-E Reimbursable" property="iveReimbursable"/>
 				         
@@ -125,7 +127,7 @@
 		
 		<aui:button-row>
 			<aui:button type="cancel" value="Cancel" onClick="${showPendingRequestsFinancialURL}" />
-			<aui:button type="submit" value="Preview in PDEF"/>
+			<aui:button type="submit" value="Preview in PDF" onClick="${previewPdf}"/>
 		</aui:button-row>
 		
 		

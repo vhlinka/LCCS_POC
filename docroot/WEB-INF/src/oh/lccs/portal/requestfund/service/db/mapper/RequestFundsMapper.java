@@ -29,8 +29,8 @@ public interface RequestFundsMapper {
 	/*@Select("SELECT * FROM user_ WHERE userId = #{userId}")
 	public User searchBasedOnSacwisId(@Param("userId") String userId);*/
 	
-	static final String SQL="select  SACWIS.GET_PERSON_NAME_FORMAT(p.person_id, 'LSFM') as personFullName, to_char(p.birth_date,'yyyy-mm-dd hh:mm:ss') as dob, p.person_id as sacwisId,RD.SHORT_DESC as type,"+
-            " to_char(lce.CUSTODY_START_DATE,'yyyy-mm-dd hh:mm:ss') as custodyDate, ag.agency_name as custody, ag.agency_id as custodyAgencyId ,  ps.PLACEMENT_SETTING_ID as placement, e.IVE_ELIGIBLE_INDICATOR as iveReimbursable, cp.case_id as caseId "+
+	static final String SQL="select  SACWIS.GET_PERSON_NAME_FORMAT(p.person_id, 'LSFM') as personFullName, nvl(to_char(p.birth_date,'mm/dd/yyyy'), ' ') as dob, p.person_id as sacwisId,nvl(RD.SHORT_DESC,' ') as type,"+
+            " nvl(to_char(lce.CUSTODY_START_DATE,'mm/dd/yyyy'),' ') as custodyDate, nvl(ag.agency_name,' ') as custody, ag.agency_id as custodyAgencyId ,  ps.placement_setting_id as placement_id, nvl(st.service_desc,' ') as serviceDesc, nvl(e.IVE_ELIGIBLE_INDICATOR,' ') as iveReimbursable, cp.case_id as caseId "+
 			" from sacwis.case_participant cp inner join sacwis.case_participant cRefPerson on cp.case_id = cRefPerson.case_id  and cRefPerson.reference_person_flag = 1 "+
 			" inner join sacwis.person p on p.person_id = cp.person_id "+        
 			" left outer join SACWIS.CASE_PARTICIPANT_RELN cpr "+ //only get relationships that are 'to' the case reference person 
@@ -40,7 +40,9 @@ public interface RequestFundsMapper {
 			" left outer join SACWIS.LEGAL_CUSTODY_AGENCY_LINK lcal on lcal.LEGAL_CUSTODY_EPISODE_ID = lce.LEGAL_CUSTODY_EPISODE_ID "+
 			" left outer join agency ag on ag.agency_id = lcal.agency_id "+
 			" left outer join SACWIS.PLACEMENT_SETTING ps on ps.CHILD_ID = lce.PERSON_ID "+
-            " and nvl(ps.END_REASON_CODE,'NULL') <> 'CREATEDINERROR' left outer join SACWIS.ELIGIBILITY e "+ 
+            " and nvl(ps.END_REASON_CODE,'NULL') <> 'CREATEDINERROR' "+
+			" left outer join SACWIS.service_type st on st.service_id = ps.service_id "+
+            " left outer join SACWIS.ELIGIBILITY e "+ 
             " on E.PERSON_ID = CP.PERSON_ID and e.TERMINATION_DATE is null and nvl(e.CREATED_IN_ERROR_FLAG, 0) = 0 "+
             " where cp.case_id = #{caseId} and cp.CURRENT_STATUS_CODE = 'ACTIVE'  and (lce.LEGAL_CUSTODY_EPISODE_id is null "+ 
             " or lce.CUSTODY_START_DATE = (select max(custody_start_date) from legal_custody_episode where person_id = cp.person_id "+ 
@@ -68,8 +70,8 @@ public interface RequestFundsMapper {
 			+ "	, #{statusCode}	, #{approverName}, #{approver}, #{createdDate},#{createdBy},  #{modifiedDate}, #{modifiedby})";
 
 	static final String INSERT_REQUEST_FUNDS_PARTICIPANT ="INSERT INTO  REQUEST_FUNDS_PARTICIPANT(	REQUEST_FUNDS_ID, PERSON_ID, PERSON_NAME, BIRTH_DATE, RELATIONSHIP_TYPE_CODE, "
-			+ "	CUSTODY, CUSTODY_AGENCY_ID,	PLACEMENT_ID, CUSTODY_DATE,	IVE_REIMBURSABLE_FLAG, CREATED_DATE ,CREATED_BY , "
-			+ "	MODIFIED_DATE ,	MODIFIED_BY) VALUES	(#{requestFundsId},#{sacwisId},#{personFullName},#{dob},#{type},#{custody},#{custodyAgencyId},0,#{custodyDate} "
+			+ "	CUSTODY, CUSTODY_AGENCY_ID,	PLACEMENT_ID, SERVICE_DESC, CUSTODY_DATE,	IVE_REIMBURSABLE_FLAG, CREATED_DATE ,CREATED_BY , "
+			+ "	MODIFIED_DATE ,	MODIFIED_BY) VALUES	(#{requestFundsId},#{sacwisId},#{personFullName},#{dob},#{type},#{custody},#{custodyAgencyId},#{placementId},#{serviceDesc},#{custodyDate} "
 			+ "	,#{iveReimbursable},#{createdDate},#{createdBy},#{modifiedDate},#{modifiedby})";
 
 
@@ -98,7 +100,7 @@ public interface RequestFundsMapper {
 	
 	static final String RETRIEVE_FUND_REQUEST_PARTICIPANTS_BY_ID  = "select REQUEST_FUNDS_PARTICIPANT_ID as id, REQUEST_FUNDS_ID as requestFundsId, PERSON_ID as sacwisId, " +
 				"PERSON_NAME as personFullName, BIRTH_DATE as dob, RELATIONSHIP_TYPE_CODE as type, CUSTODY as custody, CUSTODY_AGENCY_ID as custodyAgencyId, " +
-				"PLACEMENT_ID as placement, CUSTODY_DATE as custodyDate, IVE_REIMBURSABLE_FLAG as iveReimbursable, CREATED_DATE as createdDate, CREATED_BY as createdBy, " +
+				"PLACEMENT_ID as placementId, SERVICE_DESC as serviceDesc, CUSTODY_DATE as custodyDate, IVE_REIMBURSABLE_FLAG as iveReimbursable, CREATED_DATE as createdDate, CREATED_BY as createdBy, " +
 				"MODIFIED_DATE as modifiedDate, MODIFIED_BY as modifiedby from REQUEST_FUNDS_PARTICIPANT where REQUEST_FUNDS_ID = #{requestFundsId}";
 	
 	static final String UPDATE_REQUEST_FUNDS_STATUS = "UPDATE REQUEST_FUNDS SET  STATUS_CODE=#{statusCode} , MODIFIED_DATE=#{modifiedDate} where REQUEST_FUNDS_ID=#{id}";
