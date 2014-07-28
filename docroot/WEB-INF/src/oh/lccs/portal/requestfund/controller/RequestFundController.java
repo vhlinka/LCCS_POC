@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import oh.lccs.portal.requestfund.common.LCCSException;
 import oh.lccs.portal.requestfund.common.LccsConstants;
+import oh.lccs.portal.requestfund.domain.CaseParticipant;
 import oh.lccs.portal.requestfund.domain.RequestFunds;
 import oh.lccs.portal.requestfund.service.RequestFundsService;
 import oh.lccs.portal.requestfund.service.impl.RequestFundsServiceImpl;
@@ -26,14 +27,12 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
+import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
 import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfFormField;
 import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPCellEvent;
 import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfPageEvent;
 import com.lowagie.text.pdf.PdfWriter;
 
 
@@ -145,7 +144,7 @@ public class RequestFundController extends MVCPortlet {
 
 		      cell.setColspan (3);
 		      cell.setHorizontalAlignment (Element.ALIGN_CENTER);
-		      cell.setPadding (10.0f);
+//		      cell.setPadding (10.0f);
 		      table.addCell(cell);
 		      cell = new PdfPCell(new Paragraph("Date 01/01/2014"));
 		      cell.setColspan(2);
@@ -154,7 +153,7 @@ public class RequestFundController extends MVCPortlet {
 		      cell = new PdfPCell(new Paragraph("ORIGINAL TO FISCAL, COPIES TO PLACEMENT AND CASE FILE"));
 		      cell.setColspan(3);
 		      cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		      cell.setPadding(10.0f);
+//		      cell.setPadding(10.0f);
 		      cell.setBackgroundColor(Color.LIGHT_GRAY);
 		      table.addCell(cell);
 		      log.info("Case Worker: " + fundRequestReview.getCaseWorker());
@@ -167,21 +166,155 @@ public class RequestFundController extends MVCPortlet {
 		      cell = new PdfPCell(new Paragraph("SACWIS ID: "+fundRequestReview.getCaseId()));
 		      cell.setColspan(3);
 		      cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		      cell.setPadding(10.0f);
+//		      cell.setPadding(10.0f);
 		      table.addCell(cell);
-		      
+//		      document.add(Chunk.NEWLINE); 
 //		      PdfFormField checkboxGroupField = PdfFormField.createCheckBox(pdfWriter);
 //		      cell = new PdfPCell(table.getDefaultCell());
 //		      cell.setCellEvent(new CellField(writer1, checkboxGroupField, true));
 //		      cell = new PdfPCell(new Paragraph("checkbox3"));
 //		      PdfPCellEvent cellEvent = new PdfPCellEvent();
-//		      cell.setCellEvent(new PdfPCellEvent(writer1, checkboxGroupField, true));
+//		      cell.setCellEvent(new PdfPCellEvent(pdfWriter, checkboxGroupField, true));
+		      PdfPTable requestTypeTable=new PdfPTable(3);
+		      cell = new PdfPCell(new Paragraph("List of People For Whom Request is Made"));
+		      cell.setColspan(3);
+		      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+		      cell.setPadding(10.0f);
+		      cell.setBackgroundColor(Color.LIGHT_GRAY);
+		      requestTypeTable.addCell(cell);
+		      cell = new PdfPCell(new Paragraph("Type of Request:"));
+		      cell.setColspan(3);
+		      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+		      cell.setPadding(10.0f);
+		      requestTypeTable.addCell(cell);
+		      requestTypeTable.addCell("Donation");
+		      requestTypeTable.addCell("Preplacment Prevention");
+		      requestTypeTable.addCell("Aftercare Independence");
+		      requestTypeTable.addCell("Kinship Care");
+		      requestTypeTable.addCell("Operating");
+		      requestTypeTable.addCell("Family Reunification");
+		      requestTypeTable.addCell("TANF / Child Welfare");
+		      requestTypeTable.addCell("Alternative Response");
+		      requestTypeTable.addCell("");
+//		      cell = new PdfPCell(new Paragraph("Requesting for:*"));
+//		      cell.setColspan(3);
+//		      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+//		      cell.setPadding(10.0f);
+//		      table.addCell(cell);
+		      
+		      PdfPTable table1 = new PdfPTable(8);
+		      if(fundRequestReview.getRequestingForPeople()!= null && fundRequestReview.getRequestingForPeople().size()> 0){
+		    	  
+		    	  cell = new PdfPCell(new Paragraph("Requesting for"));
+			      cell.setColspan(8);
+			      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			      cell.setPadding(10.0f);
+			      table1.addCell(cell);
+		    	  
+		    	  cell = new PdfPCell(new Paragraph("Person's Full Name"));
+		    	  cell.setBackgroundColor(Color.LIGHT_GRAY);
+		    	  table1.addCell(cell);
+		    	  
+		    	  cell = new PdfPCell(new Paragraph("Client/Sacwis ID"));
+		    	  cell.setBackgroundColor(Color.LIGHT_GRAY);
+		    	  table1.addCell(cell);
+		    	  
+		    	  cell = new PdfPCell(new Paragraph("DOB"));
+		    	  cell.setBackgroundColor(Color.LIGHT_GRAY);
+		    	  table1.addCell(cell);
+		    	  
+		    	  cell = new PdfPCell(new Paragraph("Type"));
+		    	  cell.setBackgroundColor(Color.LIGHT_GRAY);
+		    	  table1.addCell(cell);
+		    	  
+		    	  cell = new PdfPCell(new Paragraph("Custody With"));
+		    	  cell.setBackgroundColor(Color.LIGHT_GRAY);
+		    	  table1.addCell(cell);
+		    	  
+		    	  cell = new PdfPCell(new Paragraph("Child Placement"));
+		    	  cell.setBackgroundColor(Color.LIGHT_GRAY);
+		    	  table1.addCell(cell);
+		    	  
+		    	  cell = new PdfPCell(new Paragraph("Custody Date"));
+		    	  cell.setBackgroundColor(Color.LIGHT_GRAY);
+		    	  table1.addCell(cell);
+		    	  
+		    	  cell = new PdfPCell(new Paragraph("IV-E Reimbursable"));
+		    	  cell.setBackgroundColor(Color.LIGHT_GRAY);
+		    	  table1.addCell(cell);
+		    	  
+		    	  for(CaseParticipant participant: fundRequestReview.getRequestingForPeople()){
+		    		  table1.addCell(participant.getPersonFullName());
+		    		  table1.addCell(" "+participant.getSacwisId());
+		    		  table1.addCell(participant.getDob());
+		    		  table1.addCell(participant.getType());
+		    		  table1.addCell(participant.getCustody());
+		    		  table1.addCell(participant.getServiceDesc());
+		    		  table1.addCell(participant.getCustodyDate());
+		    		  table1.addCell(participant.getIveReimbursable());
+		    	  }
+		    	  		    	  
+		      }
+		      
+		   PdfPTable  infoTable = new  PdfPTable(2);
+		   
+		   cell = new PdfPCell(new Paragraph("INFORMATION FILLED IN BY CASE WORKER FOR APPROVAL"));
+		   cell.setColspan(2);
+		   cell.setBackgroundColor(Color.LIGHT_GRAY);
+		   infoTable.addCell(cell);
+		   
+		   
+		   cell = new PdfPCell(new Paragraph("Person(s) Responsible for Making purchase: "+fundRequestReview.getPersonRespForPurchase()));
+		   cell.setColspan(2);
+		   infoTable.addCell(cell);
+		   
+		   cell = new PdfPCell(new Paragraph("Purpose of Request: "+fundRequestReview.getRequestPurpose()));
+		   cell.setColspan(2);
+		   infoTable.addCell(cell);
+		   
+		   cell = new PdfPCell(new Paragraph("Other Community Resources Request: "+fundRequestReview.getOtherCommResContacted()));
+		   cell.setColspan(2);
+		   infoTable.addCell(cell);
+		   
+		   cell = new PdfPCell(new Paragraph("Total Amount Requested: "+fundRequestReview.getTotalAmtRequested()));
+		   cell.setColspan(2);
+		   infoTable.addCell(cell);
+		   
+		   cell = new PdfPCell(new Paragraph("Date Required: "+fundRequestReview.getDateRequired()));
+		   cell.setColspan(2);
+		   infoTable.addCell(cell);
+		   
+		   infoTable.addCell("Fund Type: "+fundRequestReview.getFundMode());
+		   infoTable.addCell("Fund Pickup: "+fundRequestReview.getFundDeliveryType());
+		   infoTable.addCell("Made Payable To: "+fundRequestReview.getPaymentMadeFor());
+		   infoTable.addCell("Furniture/Appliances Delivery to: "+fundRequestReview.getFurnitureDeliveryAddress());
+		   
+		   cell = new PdfPCell(new Paragraph("SS#/Tax Id of Payee: "+fundRequestReview.getSsnTaxId()));
+		   cell.setColspan(2);
+		   infoTable.addCell(cell);
+		   
+		   cell = new PdfPCell(new Paragraph("Other Instructions: "+fundRequestReview.getOtherInstructions()));
+		   cell.setColspan(2);
+		   infoTable.addCell(cell);
+		   
+		   infoTable.addCell("Charge to budget Center: "+fundRequestReview.getBudgetCenter());
+		   infoTable.addCell("Line Item: "+fundRequestReview.getLineItem());
 		      
 	        document.open();
 	        // step 4
 	        
 	        document.add(new Paragraph("Preview to PDF File"));
+	        document.add(Chunk.NEWLINE); 
 	        document.add(table);
+	        
+	        document.add(Chunk.NEWLINE); 
+	        document.add(requestTypeTable);
+	         
+	        if(fundRequestReview.getRequestingForPeople()!= null && fundRequestReview.getRequestingForPeople().size()> 0){
+	        	document.add(table1);
+	        }
+	        document.add(Chunk.NEWLINE);
+	        document.add(infoTable);
 	        document.newPage();
 	        // step 5
 	        

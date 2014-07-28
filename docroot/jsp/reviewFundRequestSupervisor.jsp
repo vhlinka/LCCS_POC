@@ -99,6 +99,7 @@
 					  	<aui:option selected="<%= \"VOUCHER\".equalsIgnoreCase(fundrequest.getFundMode()) %>" value="VOUCHER"><liferay-ui:message key="Voucher" /></aui:option>
 						<aui:option selected="<%= \"CHECK\".equalsIgnoreCase(fundrequest.getFundMode()) %>" value="CHECK"><liferay-ui:message key="Check" /></aui:option>
 					</aui:select>
+					<aui:input  label="SS#/Tax Id of Payee: "  name="ssnTaxId" value="${fundrequest.ssnTaxId}"></aui:input>
 					<aui:input maxlength="250" rows="6" label="Made Payable To:* " name="paymentMadeFor" type="textarea" required="true" value="${fundrequest.paymentMadeFor}"></aui:input>
 					<aui:input maxlength="250" rows="6" label="Other Instructions: " name="otherInstructions" type="textarea" value="${fundrequest.otherInstructions}"></aui:input>
 		        	
