@@ -1,6 +1,8 @@
 package oh.lccs.portal.requestfund.controller;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -46,14 +48,23 @@ public class Utility {
 			requestFunds.setCaseId(new BigDecimal( actionRequest.getParameter("caseId")));
 		}
 		
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 		if(actionRequest.getParameter("requestDate") != null && 
 				!"".equalsIgnoreCase(actionRequest.getParameter("requestDate").trim())){
-			requestFunds.setRequestedDate(DateUtils.getMMDDYYYYStringAsDate(actionRequest.getParameter("requestDate")));
+			requestFunds.setRequestedDate(actionRequest.getParameter("requestDate"));
 		}else{
-			SimpleDateFormat df1 = new SimpleDateFormat("dd/MM/yyyy");
-			String currentDate = df1.format(new Date());
-			requestFunds.setRequestedDate(DateUtils.getMMDDYYYYStringAsDate(currentDate));
+			String currentDate = df.format(new Date());
+			Date d = new Date();
+			try {
+			 d = df.parse(currentDate);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println("Date d : "+d);
+			requestFunds.setRequestedDate(currentDate);
 		}
+		System.out.println("Requested Date: "+requestFunds.getRequestedDate());
 		
 		if(actionRequest.getParameter("requestingCaseWorker") != null && 
 				!"".equalsIgnoreCase(actionRequest.getParameter("requestingCaseWorker").trim())){

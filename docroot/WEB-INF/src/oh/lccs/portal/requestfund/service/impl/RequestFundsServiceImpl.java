@@ -1,10 +1,13 @@
 package oh.lccs.portal.requestfund.service.impl;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 
 
 import oh.lccs.portal.requestfund.common.DateUtils;
@@ -55,9 +58,16 @@ public class RequestFundsServiceImpl implements RequestFundsService {
 		searchResult.setCaseName(caseDetail.getCaseName());
 		searchResult.setCaseWorker(caseDetail.getCaseWorker());
 		searchResult.setRequestingCaseWorker(new BigDecimal(caseDetail.getRequestingCaseWorker()));
-		searchResult.setRequestedDate(DateUtils.getMMDDYYYYStringAsDate(caseDetail.getRequestedDate()));
-		searchResult.setWorkerPhoneNumber(caseDetail.getWorkerPhoneNumber());
+		if(dto.getRequestedDate()!= null){
+			searchResult.setRequestedDate(dto.getRequestedDate());
+		}else{
+			searchResult.setRequestedDate(caseDetail.getRequestedDate());
+		}
 		
+		searchResult.setWorkerPhoneNumber(caseDetail.getWorkerPhoneNumber());
+		if(dto.getWorkerPhoneNumber()!= null){
+			searchResult.setWorkerPhoneNumber(dto.getWorkerPhoneNumber());
+		}
 		searchResult.setCaseId(new BigDecimal(1234));
 		if(dto.getCaseId() != null){
 			searchResult.setCaseId(dto.getCaseId());	
@@ -84,9 +94,10 @@ public class RequestFundsServiceImpl implements RequestFundsService {
 	public boolean saveData(RequestFunds dto) {
 		// TODO Auto-generated method stub
 		java.util.Date date= new java.util.Date();
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 		dto.setModifiedDate(date);
 		dto.setCreatedDate(date);
-		dto.setRequestedDate(date);
+		dto.setRequestedDate(df.format(date));
 		dto.setDateRequired(date);
 		
 		System.out.println("requestFunds === " + dto.toString());

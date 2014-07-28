@@ -25,7 +25,7 @@
  			<fieldset>
 				<aui:input  inlineField="true" label="Sacwis ID: "  name="caseId" value="${fundrequest.caseId}"></aui:input>
 				<!--<liferay-ui:input-date formName="requestedDate" yearValue="2010" monthValue="3" dayValue="21" dayParam="d1" monthParam="m1" yearParam="y1" />-->
-				 <aui:input  inlineField="true" label="Request Date: "  name="requestedDate" value="01/21/2013"></aui:input> 
+				 <aui:input  inlineField="true" label="Request Date: "  name="requestedDate" value="${fundrequest.requestedDate}"></aui:input> 
 			</fieldset>
 			<fieldset>
 				<aui:input  inlineField="true" label="Caseworker Requesting: " name="requestingCaseWorker" value="${fundrequest.requestingCaseWorker}"></aui:input> 

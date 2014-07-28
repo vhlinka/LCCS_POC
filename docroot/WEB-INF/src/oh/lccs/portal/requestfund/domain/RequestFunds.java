@@ -15,7 +15,7 @@ public class RequestFunds {
 	
 	private BigDecimal caseId;
 	
-	private Date requestedDate;
+	private String requestedDate;
 	private BigDecimal requestingCaseWorker;
 	private String caseWorker;
 	private String caseName;
@@ -96,11 +96,11 @@ public class RequestFunds {
 		this.caseId = caseId;
 	}
 
-	public Date getRequestedDate() {
+	public String getRequestedDate() {
 		return requestedDate;
 	}
 
-	public void setRequestedDate(Date requestedDate) {
+	public void setRequestedDate(String requestedDate) {
 		this.requestedDate = requestedDate;
 	}
 
