@@ -112,6 +112,7 @@ public class RequestFundsServiceImpl implements RequestFundsService {
 			//get all participants from sacwis
 			List<Map<String, Object>> caseParticipantsColl = getRequestFundsDAO().searchBasedOnSacwisId(dto.getCaseId());
 			
+			if(dto.getSelectedCaseParticipants() != null){
 			int size = dto.getSelectedCaseParticipants().length;
 			for (int i = 0; i < size; i++) {
 				selectedCaseParticipant = Long.parseLong(dto.getSelectedCaseParticipants()[i]);
@@ -138,6 +139,7 @@ public class RequestFundsServiceImpl implements RequestFundsService {
 						}
 					}
 				}
+			}
 			}
 		}
 		return saveFlag;

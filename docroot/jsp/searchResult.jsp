@@ -10,6 +10,7 @@
 
 <%@ page contentType="text/html" isELIgnored="false"%>
 <portlet:defineObjects />
+<liferay-ui:error key="participantsNotSelected-error" message="Please select atleast one case participant." />
 <jsp:useBean id="fundrequest" class="oh.lccs.portal.requestfund.domain.RequestFunds" scope="session">
 	<%-- <jsp:setProperty name="fundrequest" property="*"/> --%>
 </jsp:useBean>

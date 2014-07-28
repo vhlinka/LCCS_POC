@@ -48,6 +48,7 @@ public class RequestFundController extends MVCPortlet {
 
 	static String SYSTEM_ERROR = "system-error";
 	static String RECORD_NOT_FOUND_ERROR = "caseIdNotFound-error";
+	static String PARTICIPANTS_NOT_SELECTED_ERROR = "participantsNotSelected-error";
 	
 	private RequestFundsService requestFundsService;
 	
@@ -388,6 +389,14 @@ public class RequestFundController extends MVCPortlet {
     {
     	try{
 	    	RequestFunds requestForm = Utility.populateRequestFundsFromForm(actionRequest);
+	    	if(requestForm.getSelectedCaseParticipants() == null){
+	    		SessionErrors.add(actionRequest, PARTICIPANTS_NOT_SELECTED_ERROR);
+	    		RequestFunds fundRequestInput = Utility.populateRequestFundsFromForm(actionRequest);
+		    	RequestFunds fundRequestSearchResult = getRequestFundsService().searchForm(fundRequestInput);
+		    	actionRequest.setAttribute("fundrequest", fundRequestSearchResult);
+		    	actionResponse.setRenderParameter("jspPage", "/jsp/searchResult.jsp");
+	    		return;
+	    	}
 	       
 	    	if ( Validator.isNotNull(requestForm)) {
 	    		String s = requestForm.getBudgetCenter();
