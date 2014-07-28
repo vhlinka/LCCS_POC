@@ -51,12 +51,12 @@ public interface RequestFundsMapper {
 	
 	static final String SAMPLE="select case_id as caseId from sacwis.case_participant where rownum=1";
 	
-	static final String CASE_SQL = "select GET_PERSON_FULL_NAME(SU.PERSON_ID) as caseWorker, "+
+	static final String CASE_SQL = "select GET_PERSON_FULL_NAME(SACWIS.GETEMPLOYEEPERSON_ID(SACWIS.GET_PRIMARY_WORKER(#{caseId}, null))) as caseWorker, "+
 				"(CB.LAST_NAME||', '|| CB.FIRST_NAME ||DECODE(CB.MIDDLE_NAME,NULL, ' ',CB.MIDDLE_NAME ))AS caseName, su.person_id as requestingCaseWorker from WORK_ASSIGNMENT WA "
 				+ "inner join workload_item wi on wi.workload_item_id = wa.workload_item_id "
 				+ " inner join EMPLOYEE E on E.EMPLOYEE_ID = WA.EMPLOYEE_ID "
 				+ " inner join SECURITY_USER SU on SU.EMPLOYEE_ID = E.EMPLOYEE_ID "
-				+ " inner join CASE_BASE CB on CB.CASE_ID = WI.WORKLOAD_ITEM_ID "
+				+ " inner join CASE_BASE CB on CB.CASE_ID = WI.WORK_ITEM_ID "
 				+ " where wi.work_item_id = #{caseId} and wi.work_item_type_code = 'CASE'  and su.end_date is null and rownum =1";
 	
 	static final String INSERT_REQUEST_FUNDS = " INSERT INTO REQUEST_FUNDS(CASE_ID, REQUESTED_DATE, 	CASE_WORKER_REQUESTING,	CASE_WORKER , 	CASE_NAME ,	WORKER_PHONE, DONATION , PREPLACEMENT , "
