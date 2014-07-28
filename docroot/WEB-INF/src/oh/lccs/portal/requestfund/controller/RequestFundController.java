@@ -136,7 +136,7 @@ public class RequestFundController extends MVCPortlet {
 //	        PrintWriter writer = null;
 	        
             // step 3
-            document.addTitle("Hello World PDF");
+            document.addTitle("Request for Funds");
             
             //Create a table
             PdfPTable table=new PdfPTable(3);
