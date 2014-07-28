@@ -42,7 +42,7 @@ public class RequestFunds {
 	private String requestPurpose;
 	private String otherCommResContacted;
 	private String totalAmtRequested;
-	private Date dateRequired;
+	private String dateRequired;
 	private String fundMode;
 	private String fundDeliveryType;
 	private String paymentMadeFor;
@@ -224,11 +224,11 @@ public class RequestFunds {
 		this.totalAmtRequested = totalAmtRequested;
 	}
 
-	public Date getDateRequired() {
+	public String getDateRequired() {
 		return dateRequired;
 	}
 
-	public void setDateRequired(Date dateRequired) {
+	public void setDateRequired(String dateRequired) {
 		this.dateRequired = dateRequired;
 	}
 

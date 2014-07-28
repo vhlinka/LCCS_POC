@@ -61,10 +61,8 @@ public class Utility {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println("Date d : "+d);
 			requestFunds.setRequestedDate(currentDate);
 		}
-		System.out.println("Requested Date: "+requestFunds.getRequestedDate());
 		
 		if(actionRequest.getParameter("requestingCaseWorker") != null && 
 				!"".equalsIgnoreCase(actionRequest.getParameter("requestingCaseWorker").trim())){
@@ -183,9 +181,17 @@ public class Utility {
 		
 		if(actionRequest.getParameter("dateRequired") != null && 
 				!"".equalsIgnoreCase(actionRequest.getParameter("dateRequired").trim())){
-			requestFunds.setDateRequired(DateUtils.getMMDDYYYYStringAsDate(actionRequest.getParameter("dateRequired")));
+			requestFunds.setDateRequired(actionRequest.getParameter("dateRequired"));
 		}else{
-			requestFunds.setDateRequired(new Date());
+			String currentDate = df.format(new Date());
+			Date d = new Date();
+			try {
+			 d = df.parse(currentDate);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			requestFunds.setDateRequired(currentDate);
 		}
 		
 		if(actionRequest.getParameter("fundMode") != null && 

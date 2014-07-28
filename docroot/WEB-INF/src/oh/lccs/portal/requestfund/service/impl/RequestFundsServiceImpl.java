@@ -98,7 +98,7 @@ public class RequestFundsServiceImpl implements RequestFundsService {
 		dto.setModifiedDate(date);
 		dto.setCreatedDate(date);
 		dto.setRequestedDate(df.format(date));
-		dto.setDateRequired(date);
+		dto.setDateRequired(df.format(date));
 		
 		System.out.println("requestFunds === " + dto.toString());
 		

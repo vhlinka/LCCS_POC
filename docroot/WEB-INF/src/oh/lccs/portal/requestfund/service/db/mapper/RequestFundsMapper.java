@@ -88,19 +88,19 @@ public interface RequestFundsMapper {
 	
 	static final String RETRIEVE_REQUEST_FUNDS_REQUESTS = "select REQUEST_FUNDS_ID as id, case_id as caseId, case_name as caseName, case_worker as caseWorker, created_date as createdDate from request_funds where STATUS_CODE = #{statusCode}";
 	
-	static final String RETRIEVE_FUND_REQUEST_BY_ID = "select REQUEST_FUNDS_ID as id, CASE_ID as caseId, REQUESTED_DATE as requestedDate, CASE_WORKER_REQUESTING as requestingCaseWorker, " +
-												"CASE_WORKER as caseWorker ,CASE_NAME as caseName, WORKER_PHONE as workerPhoneNumber, DONATION as donation, PREPLACEMENT as prePlacement, " +
+	static final String RETRIEVE_FUND_REQUEST_BY_ID = "select REQUEST_FUNDS_ID as id, CASE_ID as caseId, ISNULL(convert(char, REQUESTED_DATE, 101), '') as requestedDate, CASE_WORKER_REQUESTING as requestingCaseWorker, " +
+												"CASE_WORKER as caseWorker ,CASE_NAME as caseName, WORKER_PHONE as worcharkerPhoneNumber, DONATION as donation, PREPLACEMENT as prePlacement, " +
 												"AFTERCARE_INDEPENDENCE as afterCareIndependence, KINSHIP_CARE as kinshipCare, OPERATING as operating, FAMILY_REUNIFICATION as familyReunification, " +
 												"ALTERNATIVE_RESPONSE as alternativeResponse, PERSON_RESPFOR_PURCHASE as personRespForPurchase, REQUEST_PURPOSE as requestPurpose, " +
-												"OTHERCOMMRESCONTACTED as otherCommResContacted, TOTALAMTREQUESTED as totalAmtRequested, DATE_REQUIRED as dateRequired, FUND_MODE as fundMode, " +
+												"OTHERCOMMRESCONTACTED as otherCommResContacted, TOTALAMTREQUESTED as totalAmtRequested, ISNULL(convert(char, DATE_REQUIRED, 101), '') as dateRequired, FUND_MODE as fundMode, " +
 												"FUND_DELIVERY_TYPE as fundDeliveryType, PAYMENT_MADE_FOR as paymentMadeFor, OTHER_INSTRUCTIONS as otherInstructions, FURNITURE_DELIVERY_ADDRESS as furnitureDeliveryAddress, " +
 												"BUDGET_CENTER as budgetCenter, LINEITEM as lineItem, STATUS_CODE as statusCode, APPROVER_NAME as approverName, APPROVER as approver, " +
 												"CREATED_DATE as createdDate, CREATED_BY as createdBy, MODIFIED_DATE as modifiedDate, MODIFIED_BY as modifiedby " +
 												"from request_funds where request_funds_id = #{id}";
 	
 	static final String RETRIEVE_FUND_REQUEST_PARTICIPANTS_BY_ID  = "select REQUEST_FUNDS_PARTICIPANT_ID as id, REQUEST_FUNDS_ID as requestFundsId, PERSON_ID as sacwisId, " +
-				"PERSON_NAME as personFullName, BIRTH_DATE as dob, RELATIONSHIP_TYPE_CODE as type, CUSTODY as custody, CUSTODY_AGENCY_ID as custodyAgencyId, " +
-				"PLACEMENT_ID as placementId, SERVICE_DESC as serviceDesc, CUSTODY_DATE as custodyDate, IVE_REIMBURSABLE_FLAG as iveReimbursable, CREATED_DATE as createdDate, CREATED_BY as createdBy, " +
+				"PERSON_NAME as personFullName,ISNULL(convert(char, BIRTH_DATE, 101), '') as dob, RELATIONSHIP_TYPE_CODE as type, CUSTODY as custody, CUSTODY_AGENCY_ID as custodyAgencyId, " +
+				"PLACEMENT_ID as placementId, SERVICE_DESC as serviceDesc,ISNULL(convert(char, CUSTODY_DATE, 101), '')  as custodyDate, IVE_REIMBURSABLE_FLAG as iveReimbursable, CREATED_DATE as createdDate, CREATED_BY as createdBy, " +
 				"MODIFIED_DATE as modifiedDate, MODIFIED_BY as modifiedby from REQUEST_FUNDS_PARTICIPANT where REQUEST_FUNDS_ID = #{requestFundsId}";
 	
 	static final String UPDATE_REQUEST_FUNDS_STATUS = "UPDATE REQUEST_FUNDS SET  STATUS_CODE=#{statusCode} , MODIFIED_DATE=#{modifiedDate} where REQUEST_FUNDS_ID=#{id}";

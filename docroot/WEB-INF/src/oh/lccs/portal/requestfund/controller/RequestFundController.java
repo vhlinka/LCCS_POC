@@ -5,6 +5,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
@@ -126,6 +128,8 @@ public class RequestFundController extends MVCPortlet {
 	    	// step 1
 	    	log.info("Before creating the document");
 	        Document document = new Document();
+	        Format formatter = new SimpleDateFormat("MM/dd/yyyy");
+		    String s = "";
 	        ByteArrayOutputStream baos = new ByteArrayOutputStream();
 //            PdfWriter pdfWriter = PdfWriter.getInstance(document, baos);
 	        // step 2
@@ -159,7 +163,13 @@ public class RequestFundController extends MVCPortlet {
 		      log.info("Case Worker: " + fundRequestReview.getCaseWorker());
 		      table.addCell("Caseworker:"+ fundRequestReview.getCaseWorker());
 		      table.addCell("Worker Phone:"+ fundRequestReview.getWorkerPhoneNumber());
-		      table.addCell("Date:"+ fundRequestReview.getRequestedDate());
+		      
+		      
+//		      if(fundRequestReview.getRequestedDate()!= null){
+//		    	  s = formatter.format(fundRequestReview.getRequestedDate());
+//		      }
+		      table.addCell("Date: "+ fundRequestReview.getRequestedDate());
+		      
 		      table.addCell("Case Name:"+ fundRequestReview.getCaseName());
 		      table.addCell("Case/Log Number:"+ fundRequestReview.getWorkerPhoneNumber());
 		      table.addCell("Status:"+ fundRequestReview.getRequestedDate());
@@ -280,7 +290,11 @@ public class RequestFundController extends MVCPortlet {
 		   cell.setColspan(2);
 		   infoTable.addCell(cell);
 		   
-		   cell = new PdfPCell(new Paragraph("Date Required: "+fundRequestReview.getDateRequired()));
+		   s = "";
+	      if(fundRequestReview.getDateRequired()!= null){
+	    	  s = formatter.format(fundRequestReview.getDateRequired());
+	      }
+		   cell = new PdfPCell(new Paragraph("Date Required: "+s));
 		   cell.setColspan(2);
 		   infoTable.addCell(cell);
 		   
