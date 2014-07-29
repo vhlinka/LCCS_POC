@@ -30,13 +30,15 @@ public interface RequestFundsMapper {
 	public User searchBasedOnSacwisId(@Param("userId") String userId);*/
 	
 	static final String SQL="select  SACWIS.GET_PERSON_NAME_FORMAT(p.person_id, 'LSFM') as personFullName, nvl(to_char(p.birth_date,'mm/dd/yyyy'), ' ') as dob, p.person_id as sacwisId,nvl(RD.SHORT_DESC,' ') as type,"+
-            " nvl(to_char(lce.CUSTODY_START_DATE,'mm/dd/yyyy'),' ') as custodyDate, nvl(ag.agency_name,' ') as custody, ag.agency_id as custodyAgencyId ,  ps.placement_setting_id as placement_id, nvl(st.service_desc,' ') as serviceDesc, nvl(e.IVE_ELIGIBLE_INDICATOR,' ') as iveReimbursable, cp.case_id as caseId "+
+            " nvl(to_char(lb.official_date,'mm/dd/yyyy'),' ') as custodyDate, nvl(ag.agency_name,' ') as custody, ag.agency_id as custodyAgencyId ,  ps.placement_setting_id as placement_id, nvl(st.service_desc,' ') as serviceDesc, nvl(e.IVE_ELIGIBLE_INDICATOR,' ') as iveReimbursable, cp.case_id as caseId "+
 			" from sacwis.case_participant cp inner join sacwis.case_participant cRefPerson on cp.case_id = cRefPerson.case_id  and cRefPerson.reference_person_flag = 1 "+
 			" inner join sacwis.person p on p.person_id = cp.person_id "+        
 			" left outer join SACWIS.CASE_PARTICIPANT_RELN cpr "+ //only get relationships that are 'to' the case reference person 
 			" on cpr.case_id = cp.case_id and cpr.dest_person_id = cp.person_id and cpr.SOURCE_PERSON_ID = cRefPerson.person_id "+
 			" left outer join SACWIS.REF_DATA RD on RD.REF_DATA_CODE = cpr.RELATIONSHIP_CODE and RD.DOMAIN_CODE = 'Relationship' "+
 			" left outer join SACWIS.LEGAL_CUSTODY_EPISODE lce  on lce.PERSON_ID = cp.PERSON_ID and nvl(lce.CREATED_IN_ERROR_FLAG,0) = 0 "+
+			" left outer join sacwis.legal_status_info lsi on lsi.LEGAL_CUSTODY_EPISODE_ID = lce.LEGAL_CUSTODY_EPISODE_ID "+
+		    " left outer join sacwis.legal_base lb on lb.legal_base_id = lsi.legal_base_id "+
 			" left outer join SACWIS.LEGAL_CUSTODY_AGENCY_LINK lcal on lcal.LEGAL_CUSTODY_EPISODE_ID = lce.LEGAL_CUSTODY_EPISODE_ID "+
 			" left outer join agency ag on ag.agency_id = lcal.agency_id "+
 			" left outer join SACWIS.PLACEMENT_SETTING ps on ps.CHILD_ID = lce.PERSON_ID "+
@@ -45,8 +47,10 @@ public interface RequestFundsMapper {
             " left outer join SACWIS.ELIGIBILITY e "+ 
             " on E.PERSON_ID = CP.PERSON_ID and e.TERMINATION_DATE is null and nvl(e.CREATED_IN_ERROR_FLAG, 0) = 0 "+
             " where cp.case_id = #{caseId} and cp.CURRENT_STATUS_CODE = 'ACTIVE'  and (lce.LEGAL_CUSTODY_EPISODE_id is null "+ 
-            " or lce.CUSTODY_START_DATE = (select max(custody_start_date) from legal_custody_episode where person_id = cp.person_id "+ 
-            " and nvl(CREATED_IN_ERROR_FLAG,0) = 0))  and (ps.placement_setting_id is null  or ps.begin_date = (select max(ps.begin_date) "+ 
+            " or lb.Official_DATE = (select max(lb.official_date) from legal_base lb "+
+                    " inner join legal_status_info lsi on lsi.legal_base_id = lb.legal_base_id "+
+                    " inner join legal_participants lp on lp.legal_base_id = lb.legal_base_id where lp.person_id = cp.person_id "+ 
+                    " and nvl(lsi.CREATED_IN_ERROR_FLAG,0) = 0))   and (ps.placement_setting_id is null  or ps.begin_date = (select max(ps.begin_date) "+ 
             " from placement_setting ps where ps.child_id = cp.person_id  and nvl(ps.END_REASON_CODE,'**NULL**') <> 'CREATEDINERROR')) order by custody nulls first";
 	
 	static final String SAMPLE="select case_id as caseId from sacwis.case_participant where rownum=1";
