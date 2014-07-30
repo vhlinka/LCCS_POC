@@ -21,7 +21,5 @@ public class LccsConstants {
 	public static final BigDecimal SUPERVISOR_DENIAL = new BigDecimal(2);
 	public static final BigDecimal MANAGER_APPROVAL = new BigDecimal(3);
 	public static final BigDecimal MANAGER_DENIAL = new BigDecimal(4);
-	public static final BigDecimal FINANCE_APPROVAL = new BigDecimal(5);
-	public static final BigDecimal FINANCE_DENIAL = new BigDecimal(6);
 
 }
