@@ -16,17 +16,23 @@
 	<%-- <jsp:setProperty name="fundrequest" property="*"/> --%>
 </jsp:useBean>
 
-<portlet:actionURL var="approveRequestFinancialURL" name="previewPdf"></portlet:actionURL>
+<portlet:actionURL var="approveRequestFinancialURL" name="approveFundRequestFinance"></portlet:actionURL>
+<portlet:actionURL var="declineRequestFinancialURL" name="declineFundRequestFinance">
+	<portlet:param name="recordId" value="${fundrequest.id}"/>
+</portlet:actionURL>
 <portlet:actionURL var="showPendingRequestsFinancialURL" name="showPendingRequestsFinancial"></portlet:actionURL>
-<portlet:actionURL var="previewPdf" name="previewPdf"></portlet:actionURL>
-
+<portlet:actionURL var="previewPdf" name="previewPdf">
+	<portlet:param name="recordId" value="${fundrequest.id}"/>
+</portlet:actionURL>
 
 <%RowChecker rowCh = new RowChecker(renderResponse); %>
 <liferay-ui:panel-container id="bootstrap31">
-	<aui:form name="SacwisForm" method="post" action="${approveRequestFinancialURL}">
+<aui:form name="SacwisForm"  method="post" action="${approveRequestFinancialURL}">
+
 
 		<liferay-ui:panel title="CASE WORKER DETAILS" extended="true">
  			<fieldset>
+ 				<aui:input  inlineField="true" type = "hidden" label="Command: "  name="command"></aui:input>
  				<aui:input  inlineField="true" type = "hidden" label="Request ID: "  name="id" value="${fundrequest.id}"></aui:input>
 				<aui:input  inlineField="true" label="Sacwis ID: "  name="caseId" value="${fundrequest.caseId}"></aui:input>
 				<aui:input  inlineField="true" label="Request Date: "  name="requestedDate" value="${fundrequest.requestedDate}"></aui:input>
@@ -127,11 +133,18 @@
 		
 		
 		<aui:button-row>
-			<aui:button type="cancel" value="Cancel" onClick="${showPendingRequestsFinancialURL}" />
-			<aui:button type="submit" value="Preview in PDF" onClick="${previewPdf}"/>
+			<aui:button type="cancel" value="Cancel" onClick="${showPendingRequestsFinancial}" />
+			<aui:button type="submit" value="Approve" onClick="${approveRequestFinancialURL}" /> 
+			<a href="${declineRequestFinancialURL}" class="btn btn-primary">
+				Decline
+			</a>
+			<a href="${previewPdf}"  target="_blank"  class="btn btn-primary">
+				Preview in PDF
+			</a>
+			
+			
 		</aui:button-row>
 		
-		
-	</aui:form>
+		</aui:form>
 </liferay-ui:panel-container>
 

@@ -32,6 +32,8 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
+import com.lowagie.text.Font;
+import com.lowagie.text.FontFactory;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
@@ -49,7 +51,8 @@ public class RequestFundController extends MVCPortlet {
 	static String SYSTEM_ERROR = "system-error";
 	static String RECORD_NOT_FOUND_ERROR = "caseIdNotFound-error";
 	static String PARTICIPANTS_NOT_SELECTED_ERROR = "participantsNotSelected-error";
-	
+	static String RECORD_NOT_SELECTED_ERROR = "recordsNotSelected-error";
+				
 	private RequestFundsService requestFundsService;
 	
 	private static Log log = LogFactoryUtil.getLog(RequestFundController.class);
@@ -122,6 +125,11 @@ public class RequestFundController extends MVCPortlet {
     {
     	try{
     		RequestFunds requestForm = Utility.populateRequestFundsFromForm(actionRequest);
+    		long recordId = ParamUtil.getLong(actionRequest, "recordId");
+    		log.info("Record id is:" + recordId);
+    		requestForm.setId(new BigDecimal(recordId));
+    		log.info("Request Id: "+requestForm.getId());
+    		log.info("Command is: "+requestForm.getCommand());
     		RequestFunds fundRequestReview = getRequestFundsService().retrieveFundRequestForReview(requestForm.getId());
 	    	
 	    	HttpServletResponse response = PortalUtil.getHttpServletResponse(actionResponse);
@@ -135,6 +143,8 @@ public class RequestFundController extends MVCPortlet {
 //            PdfWriter pdfWriter = PdfWriter.getInstance(document, baos);
 	        // step 2
             PdfWriter pdfWriter = PdfWriter.getInstance(document, baos);
+            Font headingFont = FontFactory.getFont("Times-Roman", 12);
+            Font contentFont = FontFactory.getFont("Calibri", 10);
 //            PdfWriter.getInstance(document, baos);
 //	        PdfWriter.getInstance(document, new FileOutputStream("c:/junk/requestforFunds.pdf"));
 //	        PdfWriter.getInstance(document, response.getOutputStream());
@@ -151,10 +161,10 @@ public class RequestFundController extends MVCPortlet {
 		      cell.setHorizontalAlignment (Element.ALIGN_CENTER);
 //		      cell.setPadding (10.0f);
 		      table.addCell(cell);
-		      cell = new PdfPCell(new Paragraph("Date 01/01/2014"));
+		      cell = new PdfPCell(new Paragraph("Date 01/01/2014", contentFont));
 		      cell.setColspan(2);
 		      table.addCell(cell);
-		      table.addCell("LCCS#4695\nRev:10/02");
+		      table.addCell(new Paragraph("LCCS#4695\nRev:10/02", contentFont));
 		      cell = new PdfPCell(new Paragraph("ORIGINAL TO FISCAL, COPIES TO PLACEMENT AND CASE FILE"));
 		      cell.setColspan(3);
 		      cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -162,19 +172,19 @@ public class RequestFundController extends MVCPortlet {
 		      cell.setBackgroundColor(Color.LIGHT_GRAY);
 		      table.addCell(cell);
 		      log.info("Case Worker: " + fundRequestReview.getCaseWorker());
-		      table.addCell("Caseworker:"+ fundRequestReview.getCaseWorker());
-		      table.addCell("Worker Phone:"+ fundRequestReview.getWorkerPhoneNumber());
+		      table.addCell(new Paragraph("Caseworker:"+ fundRequestReview.getCaseWorker(), contentFont));
+		      table.addCell(new Paragraph("Worker Phone:"+ fundRequestReview.getWorkerPhoneNumber(), contentFont));
 		      
 		      
 //		      if(fundRequestReview.getRequestedDate()!= null){
 //		    	  s = formatter.format(fundRequestReview.getRequestedDate());
 //		      }
-		      table.addCell("Date: "+ fundRequestReview.getRequestedDate());
+		      table.addCell(new Paragraph("Date: "+ fundRequestReview.getRequestedDate(), contentFont));
 		      
-		      table.addCell("Case Name:"+ fundRequestReview.getCaseName());
-		      table.addCell("Case/Log Number:"+ fundRequestReview.getWorkerPhoneNumber());
-		      table.addCell("Status:"+ fundRequestReview.getRequestedDate());
-		      cell = new PdfPCell(new Paragraph("SACWIS ID: "+fundRequestReview.getCaseId()));
+		      table.addCell(new Paragraph("Case Name:"+ fundRequestReview.getCaseName(), contentFont));
+		      table.addCell(new Paragraph("Case/Log Number:"+ fundRequestReview.getCaseId(), contentFont));
+		      table.addCell(new Paragraph("Status:", contentFont));
+		      cell = new PdfPCell(new Paragraph("SACWIS ID: "+fundRequestReview.getCaseId(), contentFont));
 		      cell.setColspan(3);
 		      cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 //		      cell.setPadding(10.0f);
@@ -193,76 +203,115 @@ public class RequestFundController extends MVCPortlet {
 		      cell.setPadding(10.0f);
 		      cell.setBackgroundColor(Color.LIGHT_GRAY);
 		      requestTypeTable.addCell(cell);
-		      cell = new PdfPCell(new Paragraph("Type of Request:"));
+		     
+		      boolean foundRequestType = false;
+		      String requestType = "";
+		      if(fundRequestReview.getDonation() != null && "true".equals(fundRequestReview.getDonation())){
+		    	  requestType = "Donation";
+		    	  foundRequestType = true;
+		      }
+		      if(fundRequestReview.getPrePlacement() != null && "true".equals(fundRequestReview.getPrePlacement())){
+		    	  if(foundRequestType){
+		    		  requestType = requestType +" , " + "Preplacement Prevention";
+		    	  }else{
+		    		  requestType = "Preplacement Prevention";
+		    		  foundRequestType = true;
+		    	  }
+		      }
+		      if(fundRequestReview.getAfterCareIndependence() != null && "true".equals(fundRequestReview.getAfterCareIndependence())){
+		    	  if(foundRequestType){
+		    		  requestType = requestType +" , " + "Aftercare Independence";
+		    	  }else{
+		    		  requestType = "Aftercare Independence";
+		    		  foundRequestType = true;
+		    	  }
+		      }
+		      if(fundRequestReview.getKinshipCare() != null && "true".equals(fundRequestReview.getKinshipCare())){
+		    	  if(foundRequestType){
+		    		  requestType = requestType +" , " + "Kinship Care";
+		    	  }else{
+		    		  requestType = "Kinship Care";
+		    		  foundRequestType = true;
+		    	  }
+		      }
+		      if(fundRequestReview.getOperating() != null && "true".equals(fundRequestReview.getOperating())){
+		    	  if(foundRequestType){
+		    		  requestType = requestType +" , " + "Operating";
+		    	  }else{
+		    		  requestType = "Operating";
+		    		  foundRequestType = true;
+		    	  }
+		      }
+		      if(fundRequestReview.getFamilyReunification() != null && "true".equals(fundRequestReview.getFamilyReunification())){
+		    	  if(foundRequestType){
+		    		  requestType = requestType +" , " + "Family Reunification";
+		    	  }else{
+		    		  requestType = "Family Reunification";
+		    		  foundRequestType = true;
+		    	  }
+		      }
+		      if(fundRequestReview.getAlternativeResponse() != null && "true".equals(fundRequestReview.getAlternativeResponse())){
+		    	  if(foundRequestType){
+		    		  requestType = requestType +" , " + "Alternative Response";
+		    	  }else{
+		    		  requestType = "Alternative Response";
+		    		  foundRequestType = true;
+		    	  }
+		      }
+		      cell = new PdfPCell(new Paragraph("Type of Request: "+requestType, contentFont));
 		      cell.setColspan(3);
 		      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 		      cell.setPadding(10.0f);
 		      requestTypeTable.addCell(cell);
-		      requestTypeTable.addCell("Donation");
-		      requestTypeTable.addCell("Preplacment Prevention");
-		      requestTypeTable.addCell("Aftercare Independence");
-		      requestTypeTable.addCell("Kinship Care");
-		      requestTypeTable.addCell("Operating");
-		      requestTypeTable.addCell("Family Reunification");
-		      requestTypeTable.addCell("TANF / Child Welfare");
-		      requestTypeTable.addCell("Alternative Response");
-		      requestTypeTable.addCell("");
-//		      cell = new PdfPCell(new Paragraph("Requesting for:*"));
-//		      cell.setColspan(3);
-//		      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-//		      cell.setPadding(10.0f);
-//		      table.addCell(cell);
 		      
 		      PdfPTable table1 = new PdfPTable(8);
 		      if(fundRequestReview.getRequestingForPeople()!= null && fundRequestReview.getRequestingForPeople().size()> 0){
 		    	  
 		    	  cell = new PdfPCell(new Paragraph("Requesting for"));
 			      cell.setColspan(8);
-			      cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-			      cell.setPadding(10.0f);
 			      table1.addCell(cell);
 		    	  
-		    	  cell = new PdfPCell(new Paragraph("Person's Full Name"));
+		    	  cell = new PdfPCell(new Paragraph("Person's Full Name", contentFont));
 		    	  cell.setBackgroundColor(Color.LIGHT_GRAY);
 		    	  table1.addCell(cell);
 		    	  
-		    	  cell = new PdfPCell(new Paragraph("Client/Sacwis ID"));
+		    	  cell = new PdfPCell(new Paragraph("Client/Sacwis ID", contentFont));
 		    	  cell.setBackgroundColor(Color.LIGHT_GRAY);
 		    	  table1.addCell(cell);
 		    	  
-		    	  cell = new PdfPCell(new Paragraph("DOB"));
+		    	  cell = new PdfPCell(new Paragraph("DOB", contentFont));
 		    	  cell.setBackgroundColor(Color.LIGHT_GRAY);
 		    	  table1.addCell(cell);
 		    	  
-		    	  cell = new PdfPCell(new Paragraph("Type"));
+		    	  cell = new PdfPCell(new Paragraph("Type", contentFont));
 		    	  cell.setBackgroundColor(Color.LIGHT_GRAY);
 		    	  table1.addCell(cell);
 		    	  
-		    	  cell = new PdfPCell(new Paragraph("Custody With"));
+		    	  cell = new PdfPCell(new Paragraph("Custody With", contentFont));
 		    	  cell.setBackgroundColor(Color.LIGHT_GRAY);
 		    	  table1.addCell(cell);
 		    	  
-		    	  cell = new PdfPCell(new Paragraph("Child Placement"));
+		    	  cell = new PdfPCell(new Paragraph("Child Placement", contentFont));
 		    	  cell.setBackgroundColor(Color.LIGHT_GRAY);
 		    	  table1.addCell(cell);
 		    	  
-		    	  cell = new PdfPCell(new Paragraph("Custody Date"));
+		    	  cell = new PdfPCell(new Paragraph("Custody Date", contentFont));
 		    	  cell.setBackgroundColor(Color.LIGHT_GRAY);
 		    	  table1.addCell(cell);
 		    	  
-		    	  cell = new PdfPCell(new Paragraph("IV-E Reimbursable"));
+		    	  cell = new PdfPCell(new Paragraph("IV-E Reimbursable", contentFont));
 		    	  cell.setBackgroundColor(Color.LIGHT_GRAY);
 		    	  table1.addCell(cell);
 		    	  
 		    	  for(CaseParticipant participant: fundRequestReview.getRequestingForPeople()){
-		    		  table1.addCell(participant.getPersonFullName());
-		    		  table1.addCell(" "+participant.getSacwisId());
-		    		  table1.addCell(participant.getDob());
-		    		  table1.addCell(participant.getType());
-		    		  table1.addCell(participant.getCustody());
-		    		  table1.addCell(participant.getServiceDesc());
-		    		  table1.addCell(participant.getCustodyDate());
-		    		  table1.addCell(participant.getIveReimbursable());
+		    		  table1.addCell(new Paragraph(participant.getPersonFullName(), contentFont));
+		    		  table1.addCell(new Paragraph(" "+participant.getSacwisId(), contentFont));
+		    		  table1.addCell(new Paragraph(participant.getDob(), contentFont));
+		    		  table1.addCell(new Paragraph(participant.getType(), contentFont));
+		    		  table1.addCell(new Paragraph(participant.getCustody(), contentFont));
+		    		  table1.addCell(new Paragraph(participant.getServiceDesc(), contentFont));
+		    		  table1.addCell(new Paragraph(participant.getCustodyDate(), contentFont));
+		    		  table1.addCell(new Paragraph(participant.getIveReimbursable(), contentFont));
 		    	  }
 		    	  		    	  
 		      }
@@ -275,50 +324,50 @@ public class RequestFundController extends MVCPortlet {
 		   infoTable.addCell(cell);
 		   
 		   
-		   cell = new PdfPCell(new Paragraph("Person(s) Responsible for Making purchase: "+fundRequestReview.getPersonRespForPurchase()));
+		   cell = new PdfPCell(new Paragraph("Person(s) Responsible for Making purchase: "+fundRequestReview.getPersonRespForPurchase(), contentFont));
 		   cell.setColspan(2);
 		   infoTable.addCell(cell);
 		   
-		   cell = new PdfPCell(new Paragraph("Purpose of Request: "+fundRequestReview.getRequestPurpose()));
+		   cell = new PdfPCell(new Paragraph("Purpose of Request: "+fundRequestReview.getRequestPurpose(), contentFont));
 		   cell.setColspan(2);
 		   infoTable.addCell(cell);
 		   
-		   cell = new PdfPCell(new Paragraph("Other Community Resources Request: "+fundRequestReview.getOtherCommResContacted()));
+		   cell = new PdfPCell(new Paragraph("Other Community Resources Request: "+fundRequestReview.getOtherCommResContacted(), contentFont));
 		   cell.setColspan(2);
 		   infoTable.addCell(cell);
 		   
-		   cell = new PdfPCell(new Paragraph("Total Amount Requested: "+fundRequestReview.getTotalAmtRequested()));
+		   cell = new PdfPCell(new Paragraph("Total Amount Requested: "+fundRequestReview.getTotalAmtRequested(), contentFont));
 		   cell.setColspan(2);
 		   infoTable.addCell(cell);
 		   
-		   s = "";
-	      if(fundRequestReview.getDateRequired()!= null){
-	    	  s = formatter.format(fundRequestReview.getDateRequired());
-	      }
-		   cell = new PdfPCell(new Paragraph("Date Required: "+s));
+//		   s = "";
+//	      if(fundRequestReview.getDateRequired()!= null){
+//	    	  s = formatter.format(fundRequestReview.getDateRequired());
+//	      }
+		   cell = new PdfPCell(new Paragraph("Date Required: "+fundRequestReview.getDateRequired(), contentFont));
 		   cell.setColspan(2);
 		   infoTable.addCell(cell);
 		   
-		   infoTable.addCell("Fund Type: "+fundRequestReview.getFundMode());
-		   infoTable.addCell("Fund Pickup: "+fundRequestReview.getFundDeliveryType());
-		   infoTable.addCell("Made Payable To: "+fundRequestReview.getPaymentMadeFor());
-		   infoTable.addCell("Furniture/Appliances Delivery to: "+fundRequestReview.getFurnitureDeliveryAddress());
+		   infoTable.addCell(new Paragraph("Fund Type: "+fundRequestReview.getFundMode(), contentFont));
+		   infoTable.addCell(new Paragraph("Fund Pickup: "+fundRequestReview.getFundDeliveryType(), contentFont));
+		   infoTable.addCell(new Paragraph("Made Payable To: "+fundRequestReview.getPaymentMadeFor(), contentFont));
+		   infoTable.addCell(new Paragraph("Furniture/Appliances Delivery to: "+fundRequestReview.getFurnitureDeliveryAddress(), contentFont));
 		   
-		   cell = new PdfPCell(new Paragraph("SS#/Tax Id of Payee: "+fundRequestReview.getSsnTaxId()));
+		   cell = new PdfPCell(new Paragraph("SS#/Tax Id of Payee: "+fundRequestReview.getSsnTaxId(), contentFont));
 		   cell.setColspan(2);
 		   infoTable.addCell(cell);
 		   
-		   cell = new PdfPCell(new Paragraph("Other Instructions: "+fundRequestReview.getOtherInstructions()));
+		   cell = new PdfPCell(new Paragraph("Other Instructions: "+fundRequestReview.getOtherInstructions(), contentFont));
 		   cell.setColspan(2);
 		   infoTable.addCell(cell);
 		   
-		   infoTable.addCell("Charge to budget Center: "+fundRequestReview.getBudgetCenter());
-		   infoTable.addCell("Line Item: "+fundRequestReview.getLineItem());
+		   infoTable.addCell(new Paragraph("Charge to budget Center: "+fundRequestReview.getBudgetCenter(), contentFont));
+		   infoTable.addCell(new Paragraph("Line Item: "+fundRequestReview.getLineItem(), contentFont));
 		      
 	        document.open();
 	        // step 4
 	        
-	        document.add(new Paragraph("Preview to PDF File"));
+	        document.add(new Paragraph("Preview to PDF File", headingFont));
 	        document.add(Chunk.NEWLINE); 
 	        document.add(table);
 	        
@@ -371,6 +420,8 @@ public class RequestFundController extends MVCPortlet {
 	    	RequestFunds fundRequestSearchResult = getRequestFundsService().searchForm(fundRequestInput);
 	    	
 	    	actionRequest.setAttribute("fundrequest", fundRequestSearchResult);
+	    	
+	    	actionRequest.setAttribute("casePartList", fundRequestSearchResult.getRequestingForPeople());
 	    	
 	    	actionResponse.setRenderParameter("jspPage", "/jsp/searchResult.jsp");
     	
@@ -426,6 +477,10 @@ public class RequestFundController extends MVCPortlet {
 				RequestFunds fundRequestReview = getRequestFundsService().retrieveFundRequestForReview(new BigDecimal(selectedFundRequests[0]));
 				System.out.println("fundRequestReview === " + fundRequestReview);
 				actionRequest.setAttribute("fundrequest", fundRequestReview);
+			}else{
+				SessionErrors.add(actionRequest, RECORD_NOT_SELECTED_ERROR);
+				showPendingRequestsSupervisor(actionRequest, actionResponse);
+				return;
 			}
 			
 	    	actionResponse.setRenderParameter("jspPage", "/jsp/reviewFundRequestSupervisor.jsp");
@@ -449,6 +504,10 @@ public class RequestFundController extends MVCPortlet {
 				RequestFunds fundRequestReview = getRequestFundsService().retrieveFundRequestForReview(new BigDecimal(selectedFundRequests[0]));
 				System.out.println("fundRequestReview === " + fundRequestReview);
 				actionRequest.setAttribute("fundrequest", fundRequestReview);
+			}else{
+				SessionErrors.add(actionRequest, RECORD_NOT_SELECTED_ERROR);
+				showPendingRequestsManager(actionRequest, actionResponse);
+				return;
 			}
 			
 	    	actionResponse.setRenderParameter("jspPage", "/jsp/reviewFundRequestManager.jsp");
@@ -472,6 +531,10 @@ public class RequestFundController extends MVCPortlet {
 				RequestFunds fundRequestReview = getRequestFundsService().retrieveFundRequestForReview(new BigDecimal(selectedFundRequests[0]));
 				System.out.println("fundRequestReview === " + fundRequestReview);
 				actionRequest.setAttribute("fundrequest", fundRequestReview);
+			}else{
+				SessionErrors.add(actionRequest, RECORD_NOT_SELECTED_ERROR);
+				showPendingRequestsFinancial(actionRequest, actionResponse);
+				return;
 			}
 			
 	    	actionResponse.setRenderParameter("jspPage", "/jsp/reviewFundRequestFinancial.jsp");
@@ -565,6 +628,49 @@ public class RequestFundController extends MVCPortlet {
 			log.error(e);
 			SessionErrors.add(actionRequest, SYSTEM_ERROR);
 			actionResponse.setRenderParameter("jspPage", "/jsp/reviewFundRequestManager.jsp");
+		}
+    }
+    
+    public void approveFundRequestFinance(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortletException
+    {
+    	try{
+	    	RequestFunds requestForm = Utility.populateRequestFundsFromForm(actionRequest);
+			log.debug("fundRequestApprove === " + requestForm);
+	        
+			getRequestFundsService().updateFundRequestStatus(requestForm.getId(), LccsConstants.FINANCE_APPROVAL);
+	    	
+			actionResponse.setRenderParameter("jspPage", "/jsp/reviewFundRequestConfirmation.jsp");
+    	}/*catch(LCCSException le){
+			log.error(le);
+			SessionErrors.add(actionRequest, RECORD_NOT_FOUND_ERROR);
+			actionResponse.setRenderParameter("jspPage", "/jsp/requestFunds.jsp");
+		}*/catch(Exception e){
+			log.error(e);
+			SessionErrors.add(actionRequest, SYSTEM_ERROR);
+			actionResponse.setRenderParameter("jspPage", "/jsp/reviewFundRequestFinancial.jsp");
+		}
+    	
+    }
+    
+    public void declineFundRequestFinance(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortletException
+    {
+    	try{
+	    	RequestFunds requestForm = Utility.populateRequestFundsFromForm(actionRequest);
+	    	log.debug("fundRequestDecline === " + requestForm);
+	    	long recordId = ParamUtil.getLong(actionRequest, "recordId");
+    		log.info("Record id is:" + recordId);
+    		requestForm.setId(new BigDecimal(recordId));
+			getRequestFundsService().updateFundRequestStatus(requestForm.getId(), LccsConstants.FINANCE_DENIAL);
+	    	
+			actionResponse.setRenderParameter("jspPage", "/jsp/reviewFundRequestConfirmation.jsp");
+		}/*catch(LCCSException le){
+			log.error(le);
+			SessionErrors.add(actionRequest, RECORD_NOT_FOUND_ERROR);
+			actionResponse.setRenderParameter("jspPage", "/jsp/requestFunds.jsp");
+		}*/catch(Exception e){
+			log.error(e);
+			SessionErrors.add(actionRequest, SYSTEM_ERROR);
+			actionResponse.setRenderParameter("jspPage", "/jsp/reviewFundRequestFinancial.jsp");
 		}
     }
     

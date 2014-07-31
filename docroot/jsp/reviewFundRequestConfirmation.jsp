@@ -4,14 +4,12 @@
 <p></p>
 
 <portlet:renderURL  var="requestFundsURL">
-	<portlet:param name="jspPage" value="/jsp/view.jsp"/>
+	<portlet:param name="jspPage" value="/group/lccs/fundrequest"/>
 </portlet:renderURL>
 
 <aui:form action="<%= requestFundsURL %>" method="post">
 	<aui:fieldset>
- 		<aui:button-row>
-    		<aui:button type="done" value="Done" />
-     	</aui:button-row>
+ 		<a href="/group/lccs/fundrequest" class="btn btn-cancel"> Done </a>
  	</aui:fieldset>
  	
 </aui:form>

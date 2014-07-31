@@ -6,8 +6,8 @@
 <liferay-ui:error key="error" message="Sorry, an error prevented saving your greeting" />
 <liferay-ui:error key="email_error" message="Sorry, email notification not implemented yet" />
 
-
-<p>Lucas County Children's Services: Fund Request Form (LCCS #4695, Rev 10/02)</p>
+<liferay-ui:panel-container id="bootstrapview">
+<liferay-ui:panel title="Lucas County Children's Services: Fund Request Form (LCCS #4695, Rev 10/02) " id="request-for-funds-form-content">
 
 
 <portlet:actionURL var="requestFundsURL" name="setupSearch"></portlet:actionURL>
@@ -23,7 +23,8 @@
 <p><aui:a label="Review Pending Requests for Funds - Supervisor" href="<%= showPendingRequestsSupervisorURL %>" /></p>
 <p><aui:a label="Review Pending Requests for Funds - Manager" href="<%= showPendingRequestsManagerURL %>" /></p>
 <p><aui:a label="Review Pending Requests for Funds - Financial" href="<%= showPendingRequestsFinancialURL %>" /></p>
-				
+</liferay-ui:panel>
+</liferay-ui:panel-container>				
 
 
 <%-- 

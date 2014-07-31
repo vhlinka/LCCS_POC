@@ -7,6 +7,7 @@
 <liferay-ui:error key="error" message="Sorry, an error prevented saving your greeting" />
 <liferay-ui:error key="email_error" message="Sorry, email notification not implemented yet" />
 <liferay-ui:error key="system-error" message="System failure. Please try again later." />
+<liferay-ui:error key="recordsNotSelected-error" message="Please select atleast one pending request." />
 
 <portlet:actionURL var="reviewFundRequestFinancialURL" name="reviewFundRequestFinancial">
 </portlet:actionURL>
@@ -35,7 +36,7 @@
 		<aui:button-row>
 				<aui:button type="submit" value="Review Selected Fund Request"/>
 				<%-- <aui:button name="new" value="Submit a New Request for Funds" onClick="<%= requestFundsURL %>"/> --%>
-				<aui:button type="cancel" value="Cancel" onClick="<%= cancelRequestURL %>"/>
+				<a href="/group/lccs/fundrequest" class="btn btn-cancel"> Cancel </a>
 		</aui:button-row>
 	</aui:form>
 </liferay-ui:panel-container>

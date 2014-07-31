@@ -30,11 +30,7 @@
 					 
 						<aui:button-row>
 			 				<aui:button type="submit" value="Search"/>
-			 				<aui:button
-								type="cancel"
-			 					value="Cancel"
-			 					onClick="<%= cancelRequestURL %>"
-			 					/>
+			 				<a href="/group/lccs/fundrequest" class="btn btn-cancel"> Cancel </a>
 			 			</aui:button-row>
 					</aui:fieldset>
 				</aui:layout>

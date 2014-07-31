@@ -10,10 +10,6 @@
 </portlet:renderURL>
 
 <aui:form action="<%= requestFundsURL %>">
-	<aui:fieldset>
- 		<aui:button-row>
-    		<aui:button type="done" value="Done" />
-     	</aui:button-row>
- 	</aui:fieldset>
+	<a href="/group/lccs/fundrequest" class="btn btn-cancel"> Done </a>
  	
 </aui:form>
