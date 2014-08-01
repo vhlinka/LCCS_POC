@@ -129,7 +129,6 @@ public class RequestFundController extends MVCPortlet {
     		log.info("Record id is:" + recordId);
     		requestForm.setId(new BigDecimal(recordId));
     		log.info("Request Id: "+requestForm.getId());
-    		log.info("Command is: "+requestForm.getCommand());
     		RequestFunds fundRequestReview = getRequestFundsService().retrieveFundRequestForReview(requestForm.getId());
 	    	
 	    	HttpServletResponse response = PortalUtil.getHttpServletResponse(actionResponse);
