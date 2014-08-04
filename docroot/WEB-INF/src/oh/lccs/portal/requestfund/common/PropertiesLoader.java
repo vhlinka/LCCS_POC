@@ -22,7 +22,7 @@ public class PropertiesLoader {
 		
 		try {
 			File configDir = new File(System.getProperty("catalina.base"), "conf");
-			File configFile = new File(configDir, "lccs-portal.properties");
+			File configFile = new File(configDir, LccsConstants.LCCS_PORTAL_PROPERTIES);
 			InputStream stream = new FileInputStream(configFile);
 			props.load(stream);
 			

@@ -23,5 +23,6 @@ public class LccsConstants {
 	public static final BigDecimal MANAGER_DENIAL = new BigDecimal(4);
 	public static final BigDecimal FINANCE_APPROVAL = new BigDecimal(5);
 	public static final BigDecimal FINANCE_DENIAL = new BigDecimal(6);
+	static final String LCCS_PORTAL_PROPERTIES = "lccs-portal.properties";
 
 }
