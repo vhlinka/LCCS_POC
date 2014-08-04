@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import oh.lccs.portal.requestfund.common.PropertiesLoader;
+
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -14,7 +16,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 /**
  * Represents Mybatis connection factory.
  * 
- * @author vinodh.srinivasan@compuware.com
+ * @author vinodh.srinivasan@lochbridge.com
  *
  */
 public class SacwisConnectionFactory {
@@ -24,20 +26,14 @@ public class SacwisConnectionFactory {
 	private static SqlSessionFactory loadMapper(){
 	    try{
 	    	 InputStream inputStream = null;
-	    	 Properties properties = new Properties();
-	    	 
 				try {
 					inputStream = Resources.getResourceAsStream("oh/lccs/portal/requestfund/service/db/config/sacwis-mybatis-configuration.xml");
-					File configDir = new File(System.getProperty("catalina.base"), "conf");
-					File configFile = new File(configDir, "sacwis-jdbc.properties");
-					InputStream stream = new FileInputStream(configFile);
-					properties.load(stream);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
-	    	 return new SqlSessionFactoryBuilder().build(inputStream,properties);
+	    	 return new SqlSessionFactoryBuilder().build(inputStream,PropertiesLoader.getPropertiesInstance());
        }catch(Exception e){
            //TODO: Need to handle it.
     	   e.printStackTrace();

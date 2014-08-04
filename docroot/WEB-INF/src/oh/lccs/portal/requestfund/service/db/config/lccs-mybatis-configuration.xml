@@ -14,10 +14,10 @@
             <dataSource type="POOLED">
                 <property name="poolMaximumActiveConnections" value="10"/>
                  <property name="poolMaximumIdleConnections" value="10"/>
-                <property name="driver" value="${jdbc.driverClassName}"/>
-                <property name="url" value="${jdbc.url}"/>
-                <property name="username" value="${jdbc.username}"/>
-                <property name="password" value="${jdbc.password}"/>
+                <property name="driver" value="${lccs.jdbc.driverClassName}"/>
+                <property name="url" value="${lccs.jdbc.url}"/>
+                <property name="username" value="${lccs.jdbc.username}"/>
+                <property name="password" value="${lccs.jdbc.password}"/>
             </dataSource>
         </environment>
     </environments>
