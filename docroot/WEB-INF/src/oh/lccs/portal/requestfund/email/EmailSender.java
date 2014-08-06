@@ -13,7 +13,7 @@ import oh.lccs.portal.requestfund.common.PropertiesLoader;
 
 public class EmailSender {
 	
-	private static final String FROM = "noreply@lccs.com";
+	private static final String FROM = "noreply@co.lucas.oh.us";
 	
 	public boolean sendEmail(String toAddress, String subject,String message){
 		boolean status = false;
