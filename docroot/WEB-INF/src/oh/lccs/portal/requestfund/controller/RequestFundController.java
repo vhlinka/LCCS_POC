@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Properties;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -16,8 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import oh.lccs.portal.requestfund.common.LCCSException;
 import oh.lccs.portal.requestfund.common.LccsConstants;
+import oh.lccs.portal.requestfund.common.PropertiesLoader;
 import oh.lccs.portal.requestfund.domain.CaseParticipant;
 import oh.lccs.portal.requestfund.domain.RequestFunds;
+import oh.lccs.portal.requestfund.email.EmailSender;
 import oh.lccs.portal.requestfund.service.RequestFundsService;
 import oh.lccs.portal.requestfund.service.impl.RequestFundsServiceImpl;
 
@@ -413,7 +416,6 @@ public class RequestFundController extends MVCPortlet {
     public void searchSACWIS(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortletException
     {
     	try{
-	    	
     		RequestFunds fundRequestInput = Utility.populateRequestFundsFromForm(actionRequest);
 	    	
 	    	RequestFunds fundRequestSearchResult = getRequestFundsService().searchForm(fundRequestInput);
@@ -454,6 +456,14 @@ public class RequestFundController extends MVCPortlet {
 	    	}
 	    	
 	    	getRequestFundsService().saveData(requestForm);
+	    	
+	    	//Send email notification
+	    	//TODO: The application is currently retrieving hard code email ids from lccs-portal.proprties file. It has to be 
+	    	//changed as per the requirement.
+	    	Properties prop = PropertiesLoader.getPropertiesInstance();
+	    	String emailId = prop.getProperty("supervisor.email");
+            EmailSender mailSender = new EmailSender();
+            mailSender.sendEmail(emailId, "Request Funds - CaseWorker", "A case worker has submitted a request for funds.");
 	   	
 	    	actionResponse.setRenderParameter("jspPage", "/jsp/requestConfirmation.jsp"); 
 	    
@@ -556,6 +566,12 @@ public class RequestFundController extends MVCPortlet {
 			log.debug("fundRequestApprove === " + requestForm);
 	        
 			getRequestFundsService().updateFundRequestStatus(requestForm.getId(), LccsConstants.SUPERVISOR_APPROVAL);
+			
+			//Send email notification
+			Properties prop = PropertiesLoader.getPropertiesInstance();
+	    	String emailId = prop.getProperty("manager.email");
+            EmailSender mailSender = new EmailSender();
+            mailSender.sendEmail(emailId, "Request Funds - Supervisor", "Please review the fund request and approve it");
 	    	
 			actionResponse.setRenderParameter("jspPage", "/jsp/reviewFundRequestConfirmation.jsp");
     	}/*catch(LCCSException le){
@@ -597,6 +613,12 @@ public class RequestFundController extends MVCPortlet {
 	    	log.debug("fundRequestApprove === " + requestForm);
 	        
 			getRequestFundsService().updateFundRequestStatus(requestForm.getId(), LccsConstants.MANAGER_APPROVAL);
+			
+			//Send email notification
+			Properties prop = PropertiesLoader.getPropertiesInstance();
+	    	String emailId = prop.getProperty("finance.email");
+            EmailSender mailSender = new EmailSender();
+            mailSender.sendEmail(emailId, "Request Funds - Manager", "Please review the fund request and approve it.");
 	    	
 			actionResponse.setRenderParameter("jspPage", "/jsp/reviewFundRequestConfirmation.jsp");
 		}/*catch(LCCSException le){

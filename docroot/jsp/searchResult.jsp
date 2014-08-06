@@ -62,8 +62,8 @@
 			
 			  <aui:field-wrapper first="true" label="Requesting for *: (select atleast one option) ">
 			  
-				  <liferay-ui:search-container
-				  	delta="10" emptyResultsMessage="No Participants for Case"
+				  <liferay-ui:search-container 
+				  	emptyResultsMessage="No Participants for Case" 
 					rowChecker="<%= new RowChecker(renderResponse) %>" 
 					>
 				   <liferay-ui:search-container-results results="${fundrequest.requestingForPeople}" total="${fundrequest.countOfParticipants}"/>
@@ -82,7 +82,7 @@
 				         
 				    </liferay-ui:search-container-row>	
 					
-				    <liferay-ui:search-iterator/>
+				    <liferay-ui:search-iterator paginate="false"/>
 				</liferay-ui:search-container>
 			  </aui:field-wrapper>	
 		</liferay-ui:panel>
