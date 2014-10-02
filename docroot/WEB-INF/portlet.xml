@@ -7,7 +7,7 @@
 		<portlet-class>oh.lccs.portal.requestfund.controller.RequestFundController</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/jsp/view.jsp</value>
+			<value>/jsp/index.jsp</value>
 		</init-param>
 		<init-param>
  			<name>add-process-action-success-action</name> 
@@ -26,13 +26,16 @@
 			<role-name>administrator</role-name>
 		</security-role-ref>
 		<security-role-ref>
-			<role-name>guest</role-name>
+			<role-name>caseworker</role-name>
 		</security-role-ref>
 		<security-role-ref>
-			<role-name>power-user</role-name>
+			<role-name>casework_supervisor</role-name>
 		</security-role-ref>
 		<security-role-ref>
-			<role-name>user</role-name>
+			<role-name>casework_manager </role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>fiscal</role-name>
 		</security-role-ref>
 	</portlet>
 </portlet-app>

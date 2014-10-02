@@ -1,5 +1,5 @@
 
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@include file="/jsp/common.jsp" %>
 
 <liferay-ui:success key="success" message="Greeting saved successfully!"/>
@@ -19,10 +19,18 @@
 <portlet:actionURL var="sampleFormURL" name="runSampleForm"></portlet:actionURL>
 
 <br>
-<p><aui:a label="Submit a New Request for Funds - Case Worker" href="<%= requestFundsURL %>" /></p>
-<p><aui:a label="Review Pending Requests for Funds - Supervisor" href="<%= showPendingRequestsSupervisorURL %>" /></p>
-<p><aui:a label="Review Pending Requests for Funds - Manager" href="<%= showPendingRequestsManagerURL %>" /></p>
-<p><aui:a label="Review Pending Requests for Funds - Financial" href="<%= showPendingRequestsFinancialURL %>" /></p>
+<c:if test="${userProfile.caseWorker}">
+	<p> <aui:a label="Submit a New Request for Funds - Case Worker" href="<%= requestFundsURL %>" /></p>
+</c:if>
+<c:if test="${userProfile.supervisor}">
+	<p><aui:a label="Review Pending Requests for Funds - Supervisor" href="<%= showPendingRequestsSupervisorURL %>" /></p>
+</c:if>
+<c:if test="${userProfile.manager}">
+	<p><aui:a label="Review Pending Requests for Funds - Manager" href="<%= showPendingRequestsManagerURL %>" /></p>
+</c:if>
+<c:if test="${userProfile.financeApprover}">
+	<p><aui:a label="Review Pending Requests for Funds - Financial" href="<%= showPendingRequestsFinancialURL %>" /></p>
+</c:if>
 </liferay-ui:panel>
 </liferay-ui:panel-container>				
 

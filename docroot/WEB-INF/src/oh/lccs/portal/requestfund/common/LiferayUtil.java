@@ -7,12 +7,15 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import oh.lccs.portal.requestfund.domain.UserProfile;
+
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.PropsUtil;
-import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
+import com.liferay.portal.model.UserGroup;
+import com.liferay.portal.util.PortalUtil;
 
 public final class LiferayUtil {
     
@@ -34,35 +37,42 @@ public final class LiferayUtil {
     	
     }
     
-    public LCCSGroup convertUserGroups(User user){
+    public UserProfile convertUserGroups(User user){
     	LCCSGroup lccsGroup= LCCSGroup.NO_GROUP;
+    	UserProfile userProfile = new UserProfile();
     	if(user != null){
-			//System.out.println("PortalUtil.isOmniadmin(user.getUserId()" + PortalUtil.isOmniadmin(user.getUserId()));
-		
-	        List<Group> roles;
+//			System.out.println("PortalUtil.isOmniadmin(user.getUserId()" + PortalUtil.isOmniadmin(user.getUserId()));
+    		
+	        List<UserGroup> userGroups;
 			try {
-				roles = user.getGroups();
-	        if(roles != null){
-	        	for (Group role : roles) {
-					if(role != null){
-						if(CASE_SUPERVISOR_GROUP.equalsIgnoreCase(role.getName())){
+				userGroups = user.getUserGroups();
+	        if(userGroups != null){
+	        	for (UserGroup userGroup : userGroups) {
+					if(userGroup != null){
+						if(CASE_SUPERVISOR_GROUP.equalsIgnoreCase(userGroup.getName())){
 							lccsGroup = LCCSGroup.CASE_SUPERVISOR;
-						}else if (CASE_MANAGER_GROUP.equalsIgnoreCase(role.getName())){
+							userProfile.setSupervisor(true);
+						}else if (CASE_MANAGER_GROUP.equalsIgnoreCase(userGroup.getName())){
 							lccsGroup = LCCSGroup.CASE_MANAGER;
-						}else if (CASE_WORKER_GROUP.equalsIgnoreCase(role.getName())){
+							userProfile.setManager(true);
+						}else if (CASE_WORKER_GROUP.equalsIgnoreCase(userGroup.getName())){
 							lccsGroup = LCCSGroup.CASE_WORKER;
-						}else if (CASE_FINACE_APPROVER_GROUP.equalsIgnoreCase(role.getName())){
+							userProfile.setCaseWorker(true);
+						}else if (CASE_FINACE_APPROVER_GROUP.equalsIgnoreCase(userGroup.getName())){
 							lccsGroup = LCCSGroup.CASE_FINACE_APPROVER;
+							userProfile.setFinanceApprover(true);
 						}
 					}
 				}
 	        }
+	        
 			} catch (SystemException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} 
+
 		}
-		return lccsGroup;
+		return userProfile;
     }
     
     /**

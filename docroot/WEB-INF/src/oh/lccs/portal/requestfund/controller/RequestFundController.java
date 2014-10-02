@@ -17,20 +17,26 @@ import javax.servlet.http.HttpServletResponse;
 
 import oh.lccs.portal.requestfund.common.LCCSException;
 import oh.lccs.portal.requestfund.common.LccsConstants;
+import oh.lccs.portal.requestfund.common.LiferayUtil;
 import oh.lccs.portal.requestfund.common.PropertiesLoader;
 import oh.lccs.portal.requestfund.domain.CaseParticipant;
 import oh.lccs.portal.requestfund.domain.RequestFunds;
+import oh.lccs.portal.requestfund.domain.UserProfile;
 import oh.lccs.portal.requestfund.email.EmailSender;
 import oh.lccs.portal.requestfund.service.RequestFundsService;
 import oh.lccs.portal.requestfund.service.impl.RequestFundsServiceImpl;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.User;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portal.util.WebKeys;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
@@ -60,6 +66,21 @@ public class RequestFundController extends MVCPortlet {
 	
 	private static Log log = LogFactoryUtil.getLog(RequestFundController.class);
     
+	/**
+	 * @throws SystemException 
+	 * @throws PortalException 
+     */
+    public void validateUser(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortletException, SystemException, PortalException
+    {
+//    	User user = (User) actionRequest.getAttribute(WebKeys.USER);
+    	User user =PortalUtil.getUser(actionRequest);
+    	LiferayUtil liferayUtil = LiferayUtil.instance();
+    	UserProfile userProfile = new UserProfile();
+    	userProfile = liferayUtil.convertUserGroups(user);
+    	actionRequest.setAttribute("userProfile", userProfile);
+    	// set the next jsp in the response parameter
+        actionResponse.setRenderParameter("jspPage", "/jsp/view.jsp"); 
+    }
     /**
      * the reset need explicit calls
      */
