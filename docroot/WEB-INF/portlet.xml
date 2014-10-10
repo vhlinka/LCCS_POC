@@ -26,16 +26,13 @@
 			<role-name>administrator</role-name>
 		</security-role-ref>
 		<security-role-ref>
-			<role-name>caseworker</role-name>
+			<role-name>guest</role-name>
 		</security-role-ref>
 		<security-role-ref>
-			<role-name>casework_supervisor</role-name>
+			<role-name>power-user</role-name>
 		</security-role-ref>
 		<security-role-ref>
-			<role-name>casework_manager </role-name>
-		</security-role-ref>
-		<security-role-ref>
-			<role-name>fiscal</role-name>
+			<role-name>user</role-name>
 		</security-role-ref>
 	</portlet>
 </portlet-app>

@@ -34,9 +34,9 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.User;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portal.util.WebKeys;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
@@ -72,8 +72,8 @@ public class RequestFundController extends MVCPortlet {
      */
     public void validateUser(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException, PortletException, SystemException, PortalException
     {
-//    	User user = (User) actionRequest.getAttribute(WebKeys.USER);
-    	User user =PortalUtil.getUser(actionRequest);
+    	User user = (User) actionRequest.getAttribute(WebKeys.USER);
+//    	User user =PortalUtil.getUser(actionRequest);
     	LiferayUtil liferayUtil = LiferayUtil.instance();
     	UserProfile userProfile = new UserProfile();
     	userProfile = liferayUtil.convertUserGroups(user);
